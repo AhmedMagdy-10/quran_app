@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quran_app/constant/colors.dart';
 import 'package:quran_app/views/home_page.dart';
 
 class SplashView extends StatefulWidget {
@@ -45,25 +46,27 @@ class _SplashViewState extends State<SplashView>
           Column(
             children: [
               AnimatedBuilder(
-                  animation: slidingAinmation,
-                  builder: (context, child) {
-                    return SlideTransition(
-                        position: slidingAinmation,
-                        child: const Text(
-                          'N o u r y',
-                          style: TextStyle(
-                            fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.w600,
-                            fontSize: 50,
-                            color: Colors.white,
-                          ),
-                        ));
-                  }),
+                animation: slidingAinmation,
+                builder: (context, child) {
+                  return SlideTransition(
+                    position: slidingAinmation,
+                    child: Text(
+                      'N o u r y',
+                      style: TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontWeight: FontWeight.w600,
+                        fontSize: 50,
+                        color: fourColor,
+                      ),
+                    ),
+                  );
+                },
+              ),
               Text(
                 'How to be muslim..',
                 style: TextStyle(
                   fontFamily: 'Montserrat',
-                  color: Colors.grey[400],
+                  color: threeColor,
                 ),
               ),
             ],

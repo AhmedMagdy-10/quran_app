@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quran_app/core/helper/cache_helper.dart';
 import 'package:quran_app/cubits/main_cubit_states.dart';
 import 'package:quran_app/models/surah_model.dart';
 
@@ -24,5 +25,14 @@ class MainCubit extends Cubit<MainCubitStates> {
         ErrorMainState(errorMessage: e.toString()),
       );
     }
+  }
+
+  bool isDark = false;
+
+  void changeAppMode() {
+    isDark = !isDark;
+    CacheHelper.saveData(key: 'isDark', value: isDark).then((v) {
+      emit(ChangeAppModeState());
+    });
   }
 }
