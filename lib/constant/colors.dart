@@ -11,6 +11,7 @@ Color kprimaryDarkColor = const Color(0xfffeab1f);
 Color secondDarkColor = const Color(0xfff8480d);
 
 ThemeData lightTheme(BuildContext context) => ThemeData(
+      // fontFamily: 'Cairo',
       scaffoldBackgroundColor: kprimaryColor,
       appBarTheme: AppBarTheme(
         backgroundColor: kprimaryColor,

@@ -1,42 +1,67 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:quran_app/core/helper/show_toast_state.dart';
-import 'package:quran_app/cubits/main_cubit.dart';
-import 'package:quran_app/cubits/main_cubit_states.dart';
+import 'package:quran_app/cubits/quran_page_cubit.dart/quran_cubit.dart';
+import 'package:quran_app/cubits/quran_page_cubit.dart/quran_states.dart';
 import 'package:quran_app/widgets/ayaat_list_title.dart';
+import 'package:quran_app/widgets/custom_text_field.dart';
 
-class QuranPage extends StatelessWidget {
+class QuranPage extends StatefulWidget {
   const QuranPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return BlocConsumer<MainCubit, MainCubitStates>(listener: (context, state) {
-      if (state is LoadingMainState) {
-        const Center(child: CircularProgressIndicator());
-      } else if (state is ErrorMainState) {
-        return showToast(text: state.errorMessage, state: ToastStates.error);
-      }
-    }, builder: (context, state) {
-      final ayaat = context.read<MainCubit>().ayaat;
+  State<QuranPage> createState() => _QuranPageState();
+}
 
-      return Scaffold(
-          appBar: AppBar(
-            title: const Text('القران الكريم'),
-            centerTitle: true,
-          ),
-          body: Padding(
-            padding: const EdgeInsets.all(16),
-            child: ListView.separated(
-              separatorBuilder: (context, index) => const Divider(
-                color: Colors.grey,
-              ),
-              itemBuilder: (context, index) {
-                final ayah = ayaat[index];
-                return AyaatListTitle(ayah: ayah);
-              },
-              itemCount: ayaat.length,
+class _QuranPageState extends State<QuranPage> {
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider<QuranPageCubit>(
+      create: (context) => QuranPageCubit()..getAllAyaat(),
+      child: BlocBuilder<QuranPageCubit, QuranPageStates>(
+        builder: (context, state) {
+          var ayaat = context.read<QuranPageCubit>().ayaat;
+          // var searchValue;
+          return Scaffold(
+            appBar: AppBar(
+              scrolledUnderElevation: 0,
+              title: const Text('القران الكريم'),
+              centerTitle: true,
             ),
-          ));
-    });
+            body: Directionality(
+              textDirection: TextDirection.rtl,
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    CustomTextField(
+                      onChanged: (value) {
+                        context.read<QuranPageCubit>().searchAyaat(value);
+                      },
+                      hintText: " البحث بسورة او الايه او الصفحة",
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Expanded(
+                      child: ListView.separated(
+                        physics: const BouncingScrollPhysics(),
+                        separatorBuilder: (context, index) => const Divider(
+                          color: Colors.grey,
+                        ),
+                        itemBuilder: (context, index) {
+                          final ayah = ayaat[index];
+                          return AyaatListTitle(ayah: ayah);
+                        },
+                        itemCount: ayaat.length,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
   }
 }

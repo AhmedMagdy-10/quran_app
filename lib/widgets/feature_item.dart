@@ -66,25 +66,34 @@ class FeaturesItemList extends StatelessWidget {
     return Expanded(
       child: Column(
         children: [
-          Container(
-            height: MediaQuery.sizeOf(context).height * 0.18,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              color: Colors.white,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(
-                  'assets/image/book.png',
-                  height: MediaQuery.sizeOf(context).height * 0.07,
-                ),
-                const SizedBox(
-                  width: 15,
-                ),
-                Text('القران الكريم',
-                    style: Theme.of(context).textTheme.bodyLarge),
-              ],
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const QuranPage(),
+                  ));
+            },
+            child: Container(
+              height: MediaQuery.sizeOf(context).height * 0.18,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                color: Colors.white,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'assets/image/book.png',
+                    height: MediaQuery.sizeOf(context).height * 0.07,
+                  ),
+                  const SizedBox(
+                    width: 15,
+                  ),
+                  Text('القران الكريم',
+                      style: Theme.of(context).textTheme.bodyLarge),
+                ],
+              ),
             ),
           ),
           const SizedBox(
