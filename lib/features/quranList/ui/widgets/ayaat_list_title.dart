@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quran_app/constant/colors.dart';
-import 'package:quran_app/models/surah_model.dart';
+import 'package:quran_app/features/quranList/logic/models/surah_model.dart';
 
 class AyaatListTitle extends StatelessWidget {
   const AyaatListTitle({
@@ -23,9 +23,9 @@ class AyaatListTitle extends StatelessWidget {
       ),
       trailing: Text(
         ayah.englishName,
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 18,
-          color: Colors.cyan[900],
+          color: Color.fromARGB(255, 29, 169, 173),
         ),
       ),
       subtitle: Text(

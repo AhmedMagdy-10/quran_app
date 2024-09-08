@@ -71,5 +71,10 @@ ThemeData darkTheme(BuildContext context) => ThemeData(
           fontFamily: 'Cairo',
           color: Color.fromARGB(255, 235, 152, 27),
         ),
+        bodyMedium: TextStyle(
+          fontSize: 18,
+          fontFamily: 'Cairo',
+          color: threeColor,
+        ),
       ),
     );

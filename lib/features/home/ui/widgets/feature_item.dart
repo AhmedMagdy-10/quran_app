@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:quran_app/models/feature_model.dart';
-import 'package:quran_app/views/quran_page.dart';
+import 'package:quran_app/features/home/logic/model/feature_model.dart';
+import 'package:quran_app/features/quranList/ui/quran_page.dart';
 
 class FeaturesItemList extends StatelessWidget {
   const FeaturesItemList({

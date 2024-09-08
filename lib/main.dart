@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quran_app/constant/colors.dart';
 import 'package:quran_app/core/helper/cache_helper.dart';
-import 'package:quran_app/cubits/main_cubit.dart';
-import 'package:quran_app/cubits/main_cubit_states.dart';
-import 'package:quran_app/views/splash_page.dart';
+import 'package:quran_app/features/home/logic/cubits/main_cubit.dart';
+import 'package:quran_app/features/splash/ui/splash_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,21 +20,16 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<MainCubit>(
-      create: (context) => MainCubit(),
-      child: BlocBuilder<MainCubit, MainCubitStates>(builder: (context, state) {
-        return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          theme: lightTheme(context),
-          darkTheme: darkTheme(context),
-          themeMode: mode == null
-              ? ThemeMode.system
-              : BlocProvider.of<MainCubit>(context).isDark
-                  ? ThemeMode.dark
-                  : ThemeMode.light,
-          home: const SplashView(),
-        );
-      }),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: lightTheme(context),
+      darkTheme: darkTheme(context),
+      themeMode: mode == null
+          ? ThemeMode.system
+          : BlocProvider.of<MainCubit>(context).isDark
+              ? ThemeMode.dark
+              : ThemeMode.light,
+      home: const SplashView(),
     );
   }
 }

@@ -3,7 +3,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:jhijri/_src/_jHijri.dart';
 
-import 'package:quran_app/widgets/feature_item.dart';
+import 'package:quran_app/features/home/ui/widgets/feature_item.dart';
 
 class HomePageBody extends StatelessWidget {
   const HomePageBody({super.key});
