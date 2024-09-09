@@ -4,6 +4,7 @@ import 'package:quran_app/features/home/logic/cubits/main_cubit.dart';
 import 'package:quran_app/features/home/logic/cubits/main_cubit_states.dart';
 
 import 'package:quran_app/features/home/ui/widgets/home_page_body.dart';
+import 'package:quran_app/generated/l10n.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -20,7 +21,7 @@ class HomePage extends StatelessWidget {
                 scrolledUnderElevation: 0,
                 elevation: 0,
                 title: Text(
-                  'الرئيسية',
+                  S.of(context).homeTitle,
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 actions: [

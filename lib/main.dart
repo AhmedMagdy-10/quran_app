@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:quran_app/constant/colors.dart';
 import 'package:quran_app/core/helper/cache_helper.dart';
-import 'package:quran_app/features/home/logic/cubits/main_cubit.dart';
 import 'package:quran_app/features/splash/ui/splash_page.dart';
+import 'package:quran_app/generated/l10n.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,13 +25,21 @@ class MyApp extends StatelessWidget {
       designSize: const Size(375, 813),
       splitScreenMode: true,
       minTextAdapt: true,
-      child: MaterialApp(
+      builder: (context, child) => MaterialApp(
+        localizationsDelegates: const [
+          S.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: S.delegate.supportedLocales,
+        locale: const Locale('ar'),
         debugShowCheckedModeBanner: false,
         theme: lightTheme(context),
         darkTheme: darkTheme(context),
         themeMode: mode == null
             ? ThemeMode.system
-            : BlocProvider.of<MainCubit>(context).isDark
+            : mode!
                 ? ThemeMode.dark
                 : ThemeMode.light,
         home: const SplashView(),

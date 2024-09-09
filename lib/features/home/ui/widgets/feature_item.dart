@@ -1,66 +1,70 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:quran_app/features/home/logic/model/feature_model.dart';
-import 'package:quran_app/features/quranList/ui/quran_page.dart';
+import 'package:quran_app/features/home/ui/widgets/home_page_body.dart';
+import 'package:quran_app/features/quranList/ui/quran_surahs_page.dart';
+
+import '../../../../generated/l10n.dart';
 
 class FeaturesItemList extends StatelessWidget {
   const FeaturesItemList({
     super.key,
   });
 
-  static List<FeatureModel> itemList = const [
-    FeatureModel(
-      itemImage: 'assets/image/islam.png',
-      itemText: 'الصوتيات',
-      navigatorScreen: QuranPage(),
-    ),
+  static List<FeatureModel> itemList(BuildContext context) => [
+        FeatureModel(
+          itemImage: 'assets/image/islam.png',
+          itemText: S.of(context).sounds,
+          navigatorScreen: const QuranSurahPage(),
+        ),
 
-    FeatureModel(
-      itemImage: 'assets/image/muhammed.png',
-      itemText: 'الحديث',
-      navigatorScreen: QuranPage(),
-    ),
-    FeatureModel(
-      itemImage: 'assets/image/azkar.png',
-      itemText: 'الاذكار والادعية',
-      navigatorScreen: QuranPage(),
-    ),
-    //////////////////
+        FeatureModel(
+          itemImage: 'assets/image/muhammed.png',
+          itemText: S.of(context).ahadth,
+          navigatorScreen: const QuranSurahPage(),
+        ),
+        FeatureModel(
+          itemImage: 'assets/image/azkar.png',
+          itemText: S.of(context).remembranceAndPrayers,
+          navigatorScreen: const QuranSurahPage(),
+        ),
+        //////////////////
 
-    FeatureModel(
-      itemImage: 'assets/image/qibla.png',
-      itemText: 'القبلة',
-      navigatorScreen: QuranPage(),
-    ),
+        FeatureModel(
+          itemImage: 'assets/image/qibla.png',
+          itemText: S.of(context).qibla,
+          navigatorScreen: const QuranSurahPage(),
+        ),
 
-    FeatureModel(
-      itemImage: 'assets/image/allah.png',
-      itemText: 'اسماء الله الحسني',
-      navigatorScreen: QuranPage(),
-    ),
-    FeatureModel(
-      itemImage: 'assets/image/tasbih.png',
-      itemText: 'السبحه',
-      navigatorScreen: QuranPage(),
-    ),
-    ////////////////
+        FeatureModel(
+          itemImage: 'assets/image/allah.png',
+          itemText: S.of(context).AlluhNames,
+          navigatorScreen: const QuranSurahPage(),
+        ),
+        FeatureModel(
+          itemImage: 'assets/image/tasbih.png',
+          itemText: S.of(context).Praise,
+          navigatorScreen: const QuranSurahPage(),
+        ),
+        ////////////////
 
-    FeatureModel(
-      itemImage: 'assets/image/microphone.png',
-      itemText: 'بودكاست',
-      navigatorScreen: QuranPage(),
-    ),
+        FeatureModel(
+          itemImage: 'assets/image/microphone.png',
+          itemText: S.of(context).Podcast,
+          navigatorScreen: const QuranSurahPage(),
+        ),
 
-    FeatureModel(
-      itemImage: 'assets/image/ramadan.png',
-      itemText: 'الاذان',
-      navigatorScreen: QuranPage(),
-    ),
-    FeatureModel(
-      itemImage: 'assets/image/bell.png',
-      itemText: 'الاشعارات',
-      navigatorScreen: QuranPage(),
-    ),
-  ];
+        FeatureModel(
+          itemImage: 'assets/image/ramadan.png',
+          itemText: S.of(context).Adhan,
+          navigatorScreen: const QuranSurahPage(),
+        ),
+        FeatureModel(
+          itemImage: 'assets/image/bell.png',
+          itemText: S.of(context).notifcation,
+          navigatorScreen: const QuranSurahPage(),
+        ),
+      ];
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -71,7 +75,7 @@ class FeaturesItemList extends StatelessWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const QuranPage(),
+                    builder: (context) => const QuranSurahPage(),
                   ));
             },
             child: Container(
@@ -85,12 +89,12 @@ class FeaturesItemList extends StatelessWidget {
                 children: [
                   Image.asset(
                     'assets/image/book.png',
-                    height: MediaQuery.sizeOf(context).height * 0.07,
+                    height: MediaQuery.sizeOf(context).height * 0.07.h,
                   ),
-                  const SizedBox(
-                    width: 15,
+                  SizedBox(
+                    width: 15.w,
                   ),
-                  Text('القران الكريم',
+                  Text(S.of(context).quran,
                       style: Theme.of(context).textTheme.bodyLarge),
                 ],
               ),
@@ -104,9 +108,9 @@ class FeaturesItemList extends StatelessWidget {
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3, crossAxisSpacing: 8, mainAxisSpacing: 12),
               itemBuilder: (context, index) => FeatureItem(
-                featureModel: itemList[index],
+                featureModel: itemList(context)[index],
               ),
-              itemCount: itemList.length,
+              itemCount: itemList(context).length,
             ),
           ),
         ],
@@ -133,9 +137,9 @@ class FeatureItem extends StatelessWidget {
             ));
       },
       child: Container(
-        padding: const EdgeInsets.all(10),
+        padding: EdgeInsets.all(10.w),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(16.r),
           color: Colors.white,
         ),
         child: Column(
@@ -143,10 +147,10 @@ class FeatureItem extends StatelessWidget {
           children: [
             Image.asset(
               featureModel.itemImage,
-              height: MediaQuery.sizeOf(context).height * 0.05,
+              height: MediaQuery.sizeOf(context).height * 0.05.h,
             ),
-            const SizedBox(
-              height: 5,
+            SizedBox(
+              height: 5.h,
             ),
             FittedBox(
               fit: BoxFit.scaleDown,

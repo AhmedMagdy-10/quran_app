@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:jhijri/_src/_jHijri.dart';
@@ -18,26 +19,26 @@ class HomePageBody extends StatelessWidget {
     var formatDate = DateFormat.yMMMMEEEEd('ar').format(currentDate);
 
     return Padding(
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(20.w),
       child: Center(
         child: Column(
           children: [
-            const SizedBox(
-              height: 20,
+            SizedBox(
+              height: 20.h,
             ),
             Text(
               jHijri1.toString(),
               style: Theme.of(context).textTheme.titleMedium,
             ),
-            const SizedBox(
-              height: 10,
+            SizedBox(
+              height: 10.h,
             ),
             Text(
               formatDate,
               style: Theme.of(context).textTheme.titleMedium,
             ),
-            const SizedBox(
-              height: 16,
+            SizedBox(
+              height: 16.h,
             ),
             const FeaturesItemList(),
           ],

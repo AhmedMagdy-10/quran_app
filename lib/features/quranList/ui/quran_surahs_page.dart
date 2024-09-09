@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:quran/quran.dart';
 import 'package:quran_app/constant/colors.dart';
 import 'package:quran_app/core/helper/skeletoizer_loading.dart';
@@ -8,8 +9,8 @@ import 'package:quran_app/features/quranList/logic/cubits/quran_states.dart';
 import 'package:quran_app/features/quranList/ui/widgets/ayaat_list_title.dart';
 import 'package:quran_app/core/components/custom_text_field.dart';
 
-class QuranPage extends StatelessWidget {
-  const QuranPage({super.key});
+class QuranSurahPage extends StatelessWidget {
+  const QuranSurahPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,6 @@ class QuranPage extends StatelessWidget {
       create: (context) => QuranPageCubit()..getAllAyaat(),
       child: BlocBuilder<QuranPageCubit, QuranPageStates>(
         builder: (context, state) {
-          var allAyaat = context.read<QuranPageCubit>().allAyaat;
           var ayaatSrearched = context.read<QuranPageCubit>().ayaatSrearched;
           var ayaatFiltered = context.read<QuranPageCubit>().ayatFiltered;
           // var searchValue;
@@ -32,9 +32,9 @@ class QuranPage extends StatelessWidget {
               child: Directionality(
                 textDirection: TextDirection.rtl,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 16,
-                    horizontal: 20,
+                  padding: EdgeInsets.symmetric(
+                    vertical: 16.h,
+                    horizontal: 20.w,
                   ),
                   child: Column(
                     children: [
@@ -44,8 +44,8 @@ class QuranPage extends StatelessWidget {
                         },
                         hintText: " البحث بسورة او الايه او الصفحة",
                       ),
-                      const SizedBox(
-                        height: 20,
+                      SizedBox(
+                        height: 20.h,
                       ),
                       state is LoadingQuranState
                           ? SkeletoinzerLoading(
@@ -70,9 +70,9 @@ class QuranPage extends StatelessWidget {
                             final ayaa = ayaatFiltered["result"][index];
                             return CustomAyaatFiltered(ayaa: ayaa);
                           },
-                          separatorBuilder: (context, index) => const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 10),
-                            child: Divider(),
+                          separatorBuilder: (context, index) => Padding(
+                            padding: EdgeInsets.symmetric(vertical: 10.h),
+                            child: const Divider(),
                           ),
                           itemCount: ayaatFiltered['occurences'] > 15
                               ? 15
@@ -102,9 +102,9 @@ class CustomAyaatFiltered extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: Container(
-        padding: const EdgeInsets.all(8),
+        padding: EdgeInsets.all(8.w),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(16.r),
           color: secondColor,
           boxShadow: [
             BoxShadow(
@@ -125,12 +125,12 @@ class CustomAyaatFiltered extends StatelessWidget {
                   .titleMedium!
                   .copyWith(color: kprimaryDarkColor),
             ),
-            const SizedBox(
-              height: 5,
+            SizedBox(
+              height: 5.h,
             ),
             Text(getVerse(ayaa['surah'], ayaa['verse'], verseEndSymbol: true),
                 style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                      fontSize: 17,
+                      fontSize: 17.sp,
                     )),
           ],
         ),
