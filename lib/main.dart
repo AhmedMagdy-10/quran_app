@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:quran_app/constant/colors.dart';
 import 'package:quran_app/core/helper/cache_helper.dart';
 import 'package:quran_app/features/home/logic/cubits/main_cubit.dart';
@@ -20,16 +21,21 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: lightTheme(context),
-      darkTheme: darkTheme(context),
-      themeMode: mode == null
-          ? ThemeMode.system
-          : BlocProvider.of<MainCubit>(context).isDark
-              ? ThemeMode.dark
-              : ThemeMode.light,
-      home: const SplashView(),
+    return ScreenUtilInit(
+      designSize: const Size(375, 813),
+      splitScreenMode: true,
+      minTextAdapt: true,
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: lightTheme(context),
+        darkTheme: darkTheme(context),
+        themeMode: mode == null
+            ? ThemeMode.system
+            : BlocProvider.of<MainCubit>(context).isDark
+                ? ThemeMode.dark
+                : ThemeMode.light,
+        home: const SplashView(),
+      ),
     );
   }
 }
