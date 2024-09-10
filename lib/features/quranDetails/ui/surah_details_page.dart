@@ -10,6 +10,7 @@ import 'package:quran_app/features/quranDetails/ui/widgets/basmala.dart';
 import 'package:quran_app/features/quranDetails/ui/widgets/header_widget.dart';
 
 import 'package:quran_app/features/quranDetails/ui/widgets/quran_start.dart';
+import 'package:quran_app/features/quranDetails/ui/widgets/surah_header_name.dart';
 import 'package:quran_app/features/quranList/logic/models/surah_model.dart';
 import 'package:quran_app/generated/l10n.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
@@ -113,6 +114,9 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
                     ),
                   ),
                 ),
+                CustomPageNumber(
+                  index: index,
+                )
               ],
             ),
           );
@@ -198,35 +202,34 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
   }
 }
 
-class SurahHeaderName extends StatelessWidget {
-  const SurahHeaderName({
+class CustomPageNumber extends StatelessWidget {
+  const CustomPageNumber({
     super.key,
-    required this.widget,
     required this.index,
+    // required this.surahName,
+    // required this.surahNumber,
   });
 
-  final SurahDetailsPage widget;
   final int index;
-
+  // final String surahName;
+  // final int surahNumber;
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(
-        top: 15.w,
-        left: 16.w,
-        right: 16.w,
-      ),
+      padding: EdgeInsets.all(8.0.w),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          const Spacer(flex: 1),
           Text(
-            '${S.of(context).surah} ${widget.jsonData[getPageData(index)[0]['surah'] - 1].name}',
+            "$index",
             style: TextStyle(
-              fontSize: 24.sp,
+              fontSize: 18.sp,
+              fontWeight: FontWeight.bold,
               color: const Color.fromARGB(255, 29, 169, 173),
-              fontFamily: 'uthmanic',
             ),
-          )
+          ),
+          const Spacer(flex: 1),
         ],
       ),
     );
