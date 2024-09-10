@@ -29,7 +29,7 @@ class AyaatListTitle extends StatelessWidget {
         ),
       ),
       subtitle: Text(
-        "Verse (${ayah.numberOfAyahs.toString()})",
+        "${ayah.numberOfAyahs.toString()} عدد الايات",
         style: TextStyle(
           color: Colors.grey.withOpacity(0.8),
           fontSize: 14,

@@ -33,6 +33,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "quran": MessageLookupByLibrary.simpleMessage("The Holy Quran"),
         "remembranceAndPrayers":
             MessageLookupByLibrary.simpleMessage("RemembranceAndPrayers"),
-        "sounds": MessageLookupByLibrary.simpleMessage("Sounds")
+        "searchBySurah":
+            MessageLookupByLibrary.simpleMessage("search By Surah or ayaah"),
+        "sounds": MessageLookupByLibrary.simpleMessage("Sounds"),
+        "surah": MessageLookupByLibrary.simpleMessage("surah")
       };
 }

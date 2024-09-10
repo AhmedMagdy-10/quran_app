@@ -159,6 +159,26 @@ class S {
       args: [],
     );
   }
+
+  /// `search By Surah or ayaah`
+  String get searchBySurah {
+    return Intl.message(
+      'search By Surah or ayaah',
+      name: 'searchBySurah',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `surah`
+  String get surah {
+    return Intl.message(
+      'surah',
+      name: 'surah',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

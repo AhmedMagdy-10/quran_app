@@ -33,6 +33,8 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.6
+  flutter_localizations:
+    sdk: flutter
   flutter_screenutil: ^5.9.3
   fluttertoast: ^8.2.6
   intl: ^0.19.0
@@ -43,8 +45,7 @@ dependencies:
   shared_preferences: ^2.3.2
   skeletonizer: ^1.4.2
   string_validator: ^0.3.0
-  flutter_localizations:
-        sdk: flutter
+  wakelock_plus: ^1.2.8
 
 dev_dependencies:
   flutter_lints: ^2.0.3
@@ -78,6 +79,10 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
+
+    - family: uthmanic
+      fonts:
+        - asset: assets\fonts\QCF2BSMLfonts\UthmanTN1 Ver10.otf
 
     - family: QCF_P001
       fonts:

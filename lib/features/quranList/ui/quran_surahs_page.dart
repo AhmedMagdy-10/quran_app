@@ -4,10 +4,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:quran/quran.dart';
 import 'package:quran_app/constant/colors.dart';
 import 'package:quran_app/core/helper/skeletoizer_loading.dart';
+import 'package:quran_app/features/quranDetails/ui/surah_details_page.dart';
 import 'package:quran_app/features/quranList/logic/cubits/quran_cubit.dart';
 import 'package:quran_app/features/quranList/logic/cubits/quran_states.dart';
 import 'package:quran_app/features/quranList/ui/widgets/ayaat_list_title.dart';
 import 'package:quran_app/core/components/custom_text_field.dart';
+import 'package:quran_app/features/quranList/ui/widgets/custom_ayaat%20_filtered.dart';
+import 'package:quran_app/generated/l10n.dart';
 
 class QuranSurahPage extends StatelessWidget {
   const QuranSurahPage({super.key});
@@ -29,111 +32,72 @@ class QuranSurahPage extends StatelessWidget {
             ),
             body: SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
-              child: Directionality(
-                textDirection: TextDirection.rtl,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    vertical: 16.h,
-                    horizontal: 20.w,
-                  ),
-                  child: Column(
-                    children: [
-                      CustomTextField(
-                        onChanged: (value) {
-                          context.read<QuranPageCubit>().searchAyaat(value);
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  vertical: 16.h,
+                  horizontal: 20.w,
+                ),
+                child: Column(
+                  children: [
+                    CustomTextField(
+                      onChanged: (value) {
+                        context.read<QuranPageCubit>().searchAyaat(value);
+                      },
+                      hintText: S.of(context).searchBySurah,
+                    ),
+                    SizedBox(
+                      height: 20.h,
+                    ),
+                    state is LoadingQuranState
+                        ? SkeletoinzerLoading(
+                            enabled: true,
+                            list: getDummyList(),
+                          )
+                        : ListView.separated(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            separatorBuilder: (context, index) => Divider(
+                                  color: secondColor,
+                                ),
+                            itemBuilder: (context, index) {
+                              final ayah = ayaatSrearched[index];
+                              return GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => SurahDetailsPage(
+                                            pageNumber:
+                                                getPageNumber(ayah.number, 1),
+                                            jsonData: ayaatSrearched,
+                                            highlightVerse: ""),
+                                      ),
+                                    );
+                                  },
+                                  child: AyaatListTitle(ayah: ayah));
+                            },
+                            itemCount: ayaatSrearched.length),
+                    if (ayaatFiltered != null)
+                      ListView.separated(
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          final ayaa = ayaatFiltered["result"][index];
+                          return CustomAyaatFiltered(ayaa: ayaa);
                         },
-                        hintText: " البحث بسورة او الايه او الصفحة",
-                      ),
-                      SizedBox(
-                        height: 20.h,
-                      ),
-                      state is LoadingQuranState
-                          ? SkeletoinzerLoading(
-                              enabled: true,
-                              list: getDummyList(),
-                            )
-                          : ListView.separated(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              separatorBuilder: (context, index) => Divider(
-                                    color: secondColor,
-                                  ),
-                              itemBuilder: (context, index) {
-                                final ayah = ayaatSrearched[index];
-                                return AyaatListTitle(ayah: ayah);
-                              },
-                              itemCount: ayaatSrearched.length),
-                      if (ayaatFiltered != null)
-                        ListView.separated(
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) {
-                            final ayaa = ayaatFiltered["result"][index];
-                            return CustomAyaatFiltered(ayaa: ayaa);
-                          },
-                          separatorBuilder: (context, index) => Padding(
-                            padding: EdgeInsets.symmetric(vertical: 10.h),
-                            child: const Divider(),
-                          ),
-                          itemCount: ayaatFiltered['occurences'] > 15
-                              ? 15
-                              : ayaatFiltered['occurences'],
-                        )
-                    ],
-                  ),
+                        separatorBuilder: (context, index) => Padding(
+                          padding: EdgeInsets.symmetric(vertical: 10.h),
+                          child: const Divider(),
+                        ),
+                        itemCount: ayaatFiltered['occurences'] > 15
+                            ? 15
+                            : ayaatFiltered['occurences'],
+                      )
+                  ],
                 ),
               ),
             ),
           );
         },
-      ),
-    );
-  }
-}
-
-class CustomAyaatFiltered extends StatelessWidget {
-  const CustomAyaatFiltered({
-    super.key,
-    required this.ayaa,
-  });
-
-  final dynamic ayaa;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: Container(
-        padding: EdgeInsets.all(8.w),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16.r),
-          color: secondColor,
-          boxShadow: [
-            BoxShadow(
-              color: threeColor,
-              blurRadius: 5,
-              offset: const Offset(0, 2),
-            )
-          ],
-        ),
-        child: Column(
-          children: [
-            Text(
-              " سورة ${getSurahNameArabic(
-                ayaa['surah'],
-              )}",
-              style: Theme.of(context)
-                  .textTheme
-                  .titleMedium!
-                  .copyWith(color: kprimaryDarkColor),
-            ),
-            SizedBox(
-              height: 5.h,
-            ),
-            Text(getVerse(ayaa['surah'], ayaa['verse'], verseEndSymbol: true),
-                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                      fontSize: 17.sp,
-                    )),
-          ],
-        ),
       ),
     );
   }
