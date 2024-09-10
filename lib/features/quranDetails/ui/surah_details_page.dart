@@ -6,13 +6,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:quran/quran.dart';
+import 'package:quran_app/constant/style.dart';
 import 'package:quran_app/features/quranDetails/ui/widgets/basmala.dart';
+import 'package:quran_app/features/quranDetails/ui/widgets/custom_page_namber.dart';
 import 'package:quran_app/features/quranDetails/ui/widgets/header_widget.dart';
 
 import 'package:quran_app/features/quranDetails/ui/widgets/quran_start.dart';
 import 'package:quran_app/features/quranDetails/ui/widgets/surah_header_name.dart';
 import 'package:quran_app/features/quranList/logic/models/surah_model.dart';
-import 'package:quran_app/generated/l10n.dart';
+
 import 'package:wakelock_plus/wakelock_plus.dart';
 
 class SurahDetailsPage extends StatefulWidget {
@@ -21,12 +23,14 @@ class SurahDetailsPage extends StatefulWidget {
     required this.pageNumber,
     required this.jsonData,
     required this.highlightVerse,
-    this.shouldHighlightText,
+    required this.shouldHighlightText,
+    required this.shouldHighlightSura,
   });
   final int pageNumber;
   final List<SurahModel> jsonData;
-  final bool? shouldHighlightText;
+  final bool shouldHighlightText;
   final String highlightVerse;
+  final bool shouldHighlightSura;
 
   @override
   State<SurahDetailsPage> createState() => _SurahDetailsPageState();
@@ -37,18 +41,65 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
   late PageController _pageController;
   late Timer timer;
   String textSpan = '';
+  late String highlightVerse;
+  late bool shouldHighlightText;
+  late bool shouldHighlightSura;
+  late String juz;
+
   List<GlobalKey> richTextKeys = List.generate(604, (_) => GlobalKey());
-  void highlightVerse() {}
+  void highlightVerseFunction() {
+    setState(() {
+      shouldHighlightText = widget.shouldHighlightText;
+    });
+
+    if (widget.shouldHighlightText) {
+      setState(() {
+        highlightVerse = widget.highlightVerse;
+      });
+
+      // Timer to manage the blinking effect
+      Timer.periodic(const Duration(milliseconds: 400), (timer) {
+        if (mounted) {
+          setState(() {
+            // Toggle the highlight state to create the blinking effect
+            shouldHighlightText = !shouldHighlightText;
+          });
+        }
+
+        // Stop the timer after 5 ticks (2 seconds)
+        if (timer.tick == 5) {
+          if (mounted) {
+            setState(() {
+              highlightVerse = ""; // Clear the highlighted verse
+              shouldHighlightText = false; // Ensure highlighting is turned off
+            });
+          }
+          timer.cancel(); // Cancel the timer
+        }
+      });
+    }
+  }
+
+  Future<void> changeHighlightSurah() async {
+    await Future.delayed(const Duration(seconds: 2));
+    setState(() {
+      shouldHighlightSura = false;
+    });
+  }
 
   @override
   void initState() {
+    shouldHighlightSura = widget.shouldHighlightSura;
     index = widget.pageNumber;
     _pageController = PageController(initialPage: index);
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     WakelockPlus.enable();
-    highlightVerse();
+    highlightVerseFunction();
+    changeHighlightSurah();
+
     super.initState();
+    print(index);
   }
 
   @override
@@ -92,7 +143,7 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
                 ),
                 Expanded(
                   child: Padding(
-                    padding: EdgeInsets.zero,
+                    padding: EdgeInsets.symmetric(horizontal: 4.h, vertical: 0),
                     child: SizedBox(
                       width: double.infinity,
                       child: Column(
@@ -136,7 +187,7 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
             span.add(const WidgetSpan(child: Basmala(index: 1)));
           }
           if (index == 187) {
-            span.add(WidgetSpan(child: Container(height: 10)));
+            span.add(WidgetSpan(child: Container(height: 10.h)));
           }
         }
         span.add(TextSpan(
@@ -159,23 +210,14 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
                   textSpan = "";
                 });
               },
-            text: i == e['start']
-                ? "${getVerseQCF(e['surah'], i).replaceAll(" ", "").substring(0, 1)}\u200A${getVerseQCF(e['surah'], i).replaceAll(" ", "").substring(1)}"
-                    .replaceAll(" ", "")
-                : getVerseQCF(e["surah"], i).replaceAll(" ", ""),
+            text: formatVerseText(e, i),
             style: TextStyle(
                 color: Colors.black,
                 height: (index == 1 || index == 2) ? 2 : 1.95,
                 letterSpacing: 0,
                 wordSpacing: 0,
                 fontFamily: "QCF_P${index.toString().padLeft(3, "0")}",
-                fontSize: index == 1 || index == 2
-                    ? 28
-                    : index == 145 || index == 201
-                        ? index == 532 || index == 533
-                            ? 23.sp
-                            : 23.sp
-                        : 23.sp,
+                fontSize: responsiveFontSize(context, fontSize: 25.sp),
                 backgroundColor: _getBackgroundColor(
                   e["surah"],
                   i,
@@ -185,53 +227,42 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
     }).toList();
   }
 
-  Color _getBackgroundColor(
-    int surah,
-    int verse,
-  ) {
-    if (widget.shouldHighlightText == true) {
-      return getVerse(surah, verse) == widget.highlightVerse ||
-              textSpan == " $surah$verse"
-          ? Colors.orange.withOpacity(.25)
+  String formatVerseText(dynamic e, int i) {
+    String verse = getVerseQCF(e['surah'], i).replaceAll(" ", "");
+    return (i == e['start'])
+        ? "${verse.substring(0, 1)}\u200A${verse.substring(1)}"
+        : verse;
+  }
+
+  String normalizeText(String text) {
+    // Remove special verse end symbols and normalize Arabic text
+    return text
+        .replaceAll(
+            RegExp(r'[^\u0600-\u06FF\s]'), '') // Remove non-Arabic characters
+        .trim()
+        .toLowerCase(); // Normalize to lowercase
+  }
+
+  Color _getBackgroundColor(int surah, int verse) {
+    String currentVerse = normalizeText(getVerse(surah, verse));
+    String highlightVerseTrimmed = normalizeText(widget.highlightVerse);
+
+    print("Current Verse: '$currentVerse'");
+    print("Highlight Verse: '$highlightVerseTrimmed'");
+
+    // Use `contains` instead of `==` to check if the highlight contains the current verse
+    bool shouldHighlight = highlightVerseTrimmed.contains(currentVerse);
+
+    print("Should highlight: $shouldHighlight");
+
+    if (widget.shouldHighlightText) {
+      return (shouldHighlight || textSpan == " $surah$verse")
+          ? Colors.orange.withOpacity(0.25)
           : Colors.transparent;
     } else {
       return textSpan == " $surah$verse"
-          ? Colors.orange.withOpacity(.25)
+          ? Colors.orange.withOpacity(0.25)
           : Colors.transparent;
     }
-  }
-}
-
-class CustomPageNumber extends StatelessWidget {
-  const CustomPageNumber({
-    super.key,
-    required this.index,
-    // required this.surahName,
-    // required this.surahNumber,
-  });
-
-  final int index;
-  // final String surahName;
-  // final int surahNumber;
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(8.0.w),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Spacer(flex: 1),
-          Text(
-            "$index",
-            style: TextStyle(
-              fontSize: 18.sp,
-              fontWeight: FontWeight.bold,
-              color: const Color.fromARGB(255, 29, 169, 173),
-            ),
-          ),
-          const Spacer(flex: 1),
-        ],
-      ),
-    );
   }
 }

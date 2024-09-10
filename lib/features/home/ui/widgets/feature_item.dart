@@ -56,7 +56,7 @@ class FeaturesItemList extends StatelessWidget {
 
         FeatureModel(
           itemImage: 'assets/image/ramadan.png',
-          itemText: S.of(context).Adhan,
+          itemText: S.of(context).Azann,
           navigatorScreen: const QuranSurahPage(),
         ),
         FeatureModel(

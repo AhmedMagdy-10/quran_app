@@ -21,6 +21,7 @@ class QuranSurahPage extends StatelessWidget {
       create: (context) => QuranPageCubit()..getAllAyaat(),
       child: BlocBuilder<QuranPageCubit, QuranPageStates>(
         builder: (context, state) {
+          var allAyaat = context.read<QuranPageCubit>().allAyaat;
           var ayaatSrearched = context.read<QuranPageCubit>().ayaatSrearched;
           var ayaatFiltered = context.read<QuranPageCubit>().ayatFiltered;
           // var searchValue;
@@ -67,10 +68,13 @@ class QuranSurahPage extends StatelessWidget {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) => SurahDetailsPage(
-                                            pageNumber:
-                                                getPageNumber(ayah.number, 1),
-                                            jsonData: ayaatSrearched,
-                                            highlightVerse: ""),
+                                          pageNumber:
+                                              getPageNumber(ayah.number, 1),
+                                          jsonData: ayaatSrearched,
+                                          highlightVerse: "",
+                                          shouldHighlightText: false,
+                                          shouldHighlightSura: false,
+                                        ),
                                       ),
                                     );
                                   },
@@ -82,14 +86,42 @@ class QuranSurahPage extends StatelessWidget {
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
                           final ayaa = ayaatFiltered["result"][index];
-                          return CustomAyaatFiltered(ayaa: ayaa);
+                          return CustomAyaatFiltered(
+                            ayaa: ayaa,
+                            onTap: () {
+                              final surah = ayaa['surah'];
+                              final verse = ayaa['verse'];
+                              final highlightVerse =
+                                  getVerse(surah, verse, verseEndSymbol: true);
+                              final pageNumber = getPageNumber(surah, verse);
+
+                              print(
+                                  "Navigating to page: $pageNumber with highlightVerse: $highlightVerse");
+
+                              print(highlightVerse);
+                              print(pageNumber);
+
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => SurahDetailsPage(
+                                    pageNumber: pageNumber,
+                                    jsonData: allAyaat,
+                                    shouldHighlightText: true,
+                                    highlightVerse: highlightVerse,
+                                    shouldHighlightSura: true,
+                                  ),
+                                ),
+                              );
+                            },
+                          );
                         },
                         separatorBuilder: (context, index) => Padding(
                           padding: EdgeInsets.symmetric(vertical: 10.h),
                           child: const Divider(),
                         ),
-                        itemCount: ayaatFiltered['occurences'] > 15
-                            ? 15
+                        itemCount: ayaatFiltered['occurences'] > 10
+                            ? 10
                             : ayaatFiltered['occurences'],
                       )
                   ],

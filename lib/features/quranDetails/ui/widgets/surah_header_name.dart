@@ -30,9 +30,8 @@ class SurahHeaderName extends StatelessWidget {
             style: TextStyle(
               fontSize: 24.sp,
               color: const Color.fromARGB(255, 29, 169, 173),
-              fontFamily: 'uthmanic',
             ),
-          )
+          ),
         ],
       ),
     );
