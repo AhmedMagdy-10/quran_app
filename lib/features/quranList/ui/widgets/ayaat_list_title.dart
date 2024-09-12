@@ -17,7 +17,7 @@ class AyaatListTitle extends StatelessWidget {
         ayah.name,
         style: const TextStyle(
           fontSize: 20,
-          fontFamily: '',
+          fontFamily: 'AmiriQuran',
           fontWeight: FontWeight.w600,
         ),
       ),

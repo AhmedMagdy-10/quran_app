@@ -1,17 +1,21 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:quran/quran.dart';
+import 'package:quran_app/constant/colors.dart';
 import 'package:quran_app/constant/style.dart';
 import 'package:quran_app/features/quranDetails/ui/widgets/basmala.dart';
+import 'package:quran_app/features/quranDetails/ui/widgets/custom_ayaa_option_feature.dart';
 import 'package:quran_app/features/quranDetails/ui/widgets/custom_page_namber.dart';
+import 'package:quran_app/features/quranDetails/ui/widgets/cutom_button_sheet.dart';
 import 'package:quran_app/features/quranDetails/ui/widgets/header_widget.dart';
 
 import 'package:quran_app/features/quranDetails/ui/widgets/quran_start.dart';
+import 'package:quran_app/features/quranDetails/ui/widgets/show_bottom_sheet_ayaa_feature.dart';
 import 'package:quran_app/features/quranDetails/ui/widgets/surah_header_name.dart';
 import 'package:quran_app/features/quranList/logic/models/surah_model.dart';
 
@@ -193,7 +197,7 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
         span.add(TextSpan(
             recognizer: LongPressGestureRecognizer()
               ..onLongPress = () {
-                print("onlong");
+                showBottomSheetAyaaFeature(context);
               }
               ..onLongPressDown = (details) {
                 setState(() {
