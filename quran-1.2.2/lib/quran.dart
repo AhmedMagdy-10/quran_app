@@ -388,7 +388,8 @@ enum Translation {
 }
 
 ///Takes [surahNumber], [verseNumber], [verseEndSymbol] (optional) & [translation] (optional) and returns verse translation
-String getVerseTranslation(int surahNumber, int verseNumber,
+String getVerseTranslation(
+    int surahNumber, int verseNumber, translationDataList,
     {bool verseEndSymbol = false,
     Translation translation = Translation.enSaheeh}) {
   String verse = "";

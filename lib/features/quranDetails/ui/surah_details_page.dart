@@ -4,14 +4,10 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:quran/quran.dart';
-import 'package:quran_app/constant/colors.dart';
 import 'package:quran_app/constant/style.dart';
 import 'package:quran_app/features/quranDetails/ui/widgets/basmala.dart';
-import 'package:quran_app/features/quranDetails/ui/widgets/custom_ayaa_option_feature.dart';
 import 'package:quran_app/features/quranDetails/ui/widgets/custom_page_namber.dart';
-import 'package:quran_app/features/quranDetails/ui/widgets/cutom_button_sheet.dart';
 import 'package:quran_app/features/quranDetails/ui/widgets/header_widget.dart';
 
 import 'package:quran_app/features/quranDetails/ui/widgets/quran_start.dart';
@@ -155,8 +151,11 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
                           RichText(
                             locale: const Locale("ar"),
                             key: richTextKeys[index - 1],
+                            textDirection: TextDirection.rtl,
+                            textAlign: (index == 1 || index == 2 || index > 570)
+                                ? TextAlign.center
+                                : TextAlign.center,
                             softWrap: true,
-                            textAlign: TextAlign.center,
                             text: TextSpan(
                                 style: TextStyle(
                                   color: Colors.black,
@@ -197,7 +196,12 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
         span.add(TextSpan(
             recognizer: LongPressGestureRecognizer()
               ..onLongPress = () {
-                showBottomSheetAyaaFeature(context);
+                showBottomSheetAyaaFeature(
+                  context,
+                  index: index,
+                  surahNumber: e['surah'],
+                  verseNumber: i,
+                );
               }
               ..onLongPressDown = (details) {
                 setState(() {
@@ -218,10 +222,8 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
             style: TextStyle(
                 color: Colors.black,
                 height: (index == 1 || index == 2) ? 2 : 1.95,
-                letterSpacing: 0,
-                wordSpacing: 0,
                 fontFamily: "QCF_P${index.toString().padLeft(3, "0")}",
-                fontSize: responsiveFontSize(context, fontSize: 25.sp),
+                fontSize: responsiveFontSize(context, fontSize: 24),
                 backgroundColor: _getBackgroundColor(
                   e["surah"],
                   i,

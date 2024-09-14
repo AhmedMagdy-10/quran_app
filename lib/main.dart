@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:quran_app/constant/colors.dart';
+import 'package:quran_app/core/components/initialize_local_data.dart';
 import 'package:quran_app/core/helper/cache_helper.dart';
+import 'package:quran_app/core/helper/hive_helper.dart';
 import 'package:quran_app/features/splash/ui/splash_page.dart';
 import 'package:quran_app/generated/l10n.dart';
 
@@ -10,6 +12,10 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await CacheHelper.init();
   bool? mode = CacheHelper.getSaveData(key: 'isDark');
+  await hiveHelperInit();
+  await localHiveData();
+  print(getHiveSavedDataBool('addTafseer'));
+  print(getHiveSavedData('addTafseerValue'));
   runApp(MyApp(
     mode: mode,
   ));
@@ -39,7 +45,7 @@ class MyApp extends StatelessWidget {
         darkTheme: darkTheme(context),
         themeMode: mode == null
             ? ThemeMode.system
-            : mode!
+            : mode == true
                 ? ThemeMode.dark
                 : ThemeMode.light,
         home: const SplashView(),

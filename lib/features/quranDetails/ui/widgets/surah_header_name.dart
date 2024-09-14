@@ -26,7 +26,7 @@ class SurahHeaderName extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            '${S.of(context).surah} ${widget.jsonData[getPageData(index)[0]['surah'] - 1].name}',
+            '${S.of(context).surah} ${widget.jsonData[getPageData(index)[0]["surah"]].name}',
             style: TextStyle(
               fontSize: 24.sp,
               color: const Color.fromARGB(255, 29, 169, 173),

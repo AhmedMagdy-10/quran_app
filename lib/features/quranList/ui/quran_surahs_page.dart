@@ -64,13 +64,16 @@ class QuranSurahPage extends StatelessWidget {
                               final ayah = ayaatSrearched[index];
                               return GestureDetector(
                                   onTap: () {
+                                    print(
+                                      getPageNumber(ayah.number, 1),
+                                    );
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) => SurahDetailsPage(
                                           pageNumber:
                                               getPageNumber(ayah.number, 1),
-                                          jsonData: ayaatSrearched,
+                                          jsonData: allAyaat,
                                           highlightVerse: "",
                                           shouldHighlightText: false,
                                           shouldHighlightSura: false,
