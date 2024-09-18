@@ -14,8 +14,7 @@ void main() async {
   bool? mode = CacheHelper.getSaveData(key: 'isDark');
   await hiveHelperInit();
   await localHiveData();
-  print(getHiveSavedDataBool('addTafseer'));
-  print(getHiveSavedData('addTafseerValue'));
+  print(getHiveSavedDataBool('addTafseerIamge'));
   runApp(MyApp(
     mode: mode,
   ));

@@ -4,5 +4,9 @@ localHiveData() async {
   savedDateHive('appLogo', true);
   savedDateHive("showSuraHeader", true);
   savedDateHive("addTafseer", true);
+  savedDateHive("addTafseerImage", true);
   savedDateHive("addTafseerValue", 0);
+  savedDateHive("indexOfTranslation", 0);
+  savedDateHive("indexOfTranslationInVerseByVerse", 1);
+  savedDateHive("colorsIndex", 0);
 }

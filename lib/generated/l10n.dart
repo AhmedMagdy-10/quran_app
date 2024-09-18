@@ -179,6 +179,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Share As Image`
+  String get asImage {
+    return Intl.message(
+      'Share As Image',
+      name: 'asImage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Share As Text`
+  String get asText {
+    return Intl.message(
+      'Share As Text',
+      name: 'asText',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

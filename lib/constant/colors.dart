@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:quran_app/constant/style.dart';
 
 Color quranPagesColorLight = const Color(0xffF1EEE5);
-Color quranPagesColorDark = const Color(0xff292C31);
+Color quranPagesColorDark = const Color.fromRGBO(41, 44, 49, 1);
 Color kprimaryColor = const Color(0xfffffaf5);
 Color secondColor = const Color(0xfffceddc);
 Color threeColor = const Color(0xff966e3c);
@@ -10,12 +10,17 @@ Color fourColor = const Color(0xff795547);
 Color fiveColor = const Color(0xff651c24);
 Color kprimaryDarkColor = const Color(0xfffeab1f);
 Color secondDarkColor = const Color(0xfff8480d);
+Color specialColor = const Color(0xFF2196F3);
+
+const Color primaryColor = Color(0xffC7B7A3);
+const Color accentColor = Color.fromARGB(255, 141, 74, 29);
+const Color backgroundColor = Color.fromARGB(255, 247, 248, 255);
 
 const List primaryColors = [
   Color.fromARGB(255, 141, 74, 29),
   Colors.black,
-  Colors.black,
   Color(0XFf4C76BA),
+  Color(0xff651c24),
   Colors.white,
   Color(0xffBFAE99),
   Color.fromARGB(255, 255, 255, 255),
@@ -28,6 +33,8 @@ const List primaryColors = [
   Colors.black,
   Colors.black,
   Colors.black,
+  Colors.white,
+  Colors.white,
 ];
 const List backgroundColors = [
   Color(0xffFFFCE7),
@@ -45,7 +52,9 @@ const List backgroundColors = [
   Color(0xffFEEED4),
   Color(0xffD2F4CF),
   Color(0xffFEFADF),
-  Color(0xffEAF0FE)
+  Color(0xffEAF0FE),
+  Color.fromARGB(255, 100, 218, 206),
+  Color.fromARGB(255, 143, 182, 245),
 ];
 const List secondaryColors = [
   Color.fromARGB(255, 107, 87, 0),

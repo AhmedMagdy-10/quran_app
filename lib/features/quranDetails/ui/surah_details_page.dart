@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:quran/quran.dart';
+import 'package:quran_app/constant/colors.dart';
 import 'package:quran_app/constant/style.dart';
 import 'package:quran_app/features/quranDetails/ui/widgets/basmala.dart';
 import 'package:quran_app/features/quranDetails/ui/widgets/custom_page_namber.dart';
@@ -104,7 +105,6 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
 
   @override
   void dispose() {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     WakelockPlus.disable();
     super.dispose();
   }
@@ -130,14 +130,31 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
             height: MediaQuery.sizeOf(context).height,
             child: Column(
               children: [
-                SurahHeaderName(
-                  widget: widget,
-                  index: index,
-                ),
-                if (index == 1 || index == 2)
-                  SizedBox(
-                    height: MediaQuery.sizeOf(context).height * .15,
+                Container(
+                  height: MediaQuery.sizeOf(context).height * 0.15,
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(32),
+                      bottomRight: Radius.circular(32),
+                    ),
+                    color: secondColor,
+                    image: const DecorationImage(
+                      image: AssetImage(
+                        'assets/image/try2.png',
+                      ),
+                      fit: BoxFit.cover,
+                    ),
                   ),
+                ),
+
+                // SurahHeaderName(
+                //   widget: widget,
+                //   index: index,
+                // ),
+                // if (index == 1 || index == 2)
+                //   SizedBox(
+                //     height: MediaQuery.sizeOf(context).height * .15,
+                //   ),
                 SizedBox(
                   height: 15.h,
                 ),

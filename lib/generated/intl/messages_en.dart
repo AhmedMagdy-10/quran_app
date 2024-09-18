@@ -27,6 +27,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "Podcast": MessageLookupByLibrary.simpleMessage("Podcast"),
         "Praise": MessageLookupByLibrary.simpleMessage("Praise"),
         "ahadth": MessageLookupByLibrary.simpleMessage("Hadiths"),
+        "asImage": MessageLookupByLibrary.simpleMessage("Share As Image"),
+        "asText": MessageLookupByLibrary.simpleMessage("Share As Text"),
         "homeTitle": MessageLookupByLibrary.simpleMessage("Home page"),
         "notifcation": MessageLookupByLibrary.simpleMessage("Notifcation"),
         "qibla": MessageLookupByLibrary.simpleMessage("Qibla"),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quran_app/constant/colors.dart';
 
 class Basmala extends StatelessWidget {
   const Basmala({super.key, required this.index});
@@ -16,7 +17,7 @@ class Basmala extends StatelessWidget {
             bottom: 2),
         child: Image.asset(
           'assets/image/Basmala.png',
-          color: Colors.black,
+          color: primaryColors[index] ?? Colors.black,
           width: MediaQuery.of(context).size.width * .4,
         ),
       ),

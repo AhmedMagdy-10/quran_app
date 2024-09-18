@@ -50,12 +50,6 @@ List<TranslationData> translationDataList = [
       typeAsEnumValue: Translation.ar_muyassar,
       url: "  d"),
   TranslationData(
-      typeText: 'en_sahih',
-      typeTextInRelatedLanguage: 'English - Sahih International',
-      typeInNativeLanguage: 'English',
-      typeAsEnumValue: Translation.en_sahih,
-      url: "  fs"),
-  TranslationData(
       typeText: 'baghawy',
       typeTextInRelatedLanguage: 'تفسير البغوي',
       typeInNativeLanguage: 'العربية',
@@ -118,6 +112,12 @@ List<TranslationData> translationDataList = [
       typeAsEnumValue: Translation.tanweer,
       url:
           "https://raw.githubusercontent.com/noureddin/Quran-App-Data/main/Tafaseer/tanweer.json"),
+  TranslationData(
+      typeText: 'en_sahih',
+      typeTextInRelatedLanguage: 'English - Sahih International',
+      typeInNativeLanguage: 'English',
+      typeAsEnumValue: Translation.en_sahih,
+      url: "  fs"),
   TranslationData(
       typeText: 'tafheem',
       typeTextInRelatedLanguage:

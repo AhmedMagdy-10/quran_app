@@ -11,5 +11,7 @@
     "notifcation": "Notifcation",
     "quran": "The Holy Quran",
     "searchBySurah": "search By Surah or ayaah",
-    "surah": "surah"
+    "surah": "surah",
+    "asImage": "Share As Image",
+    "asText": "Share As Text"
 }

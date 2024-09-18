@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:quran/quran.dart';
+import 'package:quran_app/constant/colors.dart';
 import 'package:quran_app/features/quranDetails/ui/surah_details_page.dart';
 import 'package:quran_app/generated/l10n.dart';
 
@@ -29,7 +30,7 @@ class SurahHeaderName extends StatelessWidget {
             '${S.of(context).surah} ${widget.jsonData[getPageData(index)[0]["surah"]].name}',
             style: TextStyle(
               fontSize: 24.sp,
-              color: const Color.fromARGB(255, 29, 169, 173),
+              color: fiveColor,
             ),
           ),
         ],

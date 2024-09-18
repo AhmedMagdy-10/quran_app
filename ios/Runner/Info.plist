@@ -49,6 +49,8 @@
     <array>
     <string>en</string>
     <string>ar</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>needforstoreimagetogallery</string>
     ...
     </array>
 </dict>

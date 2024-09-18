@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:quran/quran.dart';
-import 'package:quran/surah_data.dart';
+import 'package:quran_app/constant/colors.dart';
 
 class HeaderWidget extends StatelessWidget {
   HeaderWidget({
     super.key,
     required this.e,
     required this.jsonData,
+    this.indexOfTheme,
   });
 
   var e;
   var jsonData;
+  final int? indexOfTheme;
 
   @override
   Widget build(BuildContext context) {
@@ -34,11 +36,13 @@ class HeaderWidget extends StatelessWidget {
                 Text(
                   "اياتها\n${getVerseCount(e['surah'])}",
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 10,
-                    fontFamily: 'uthmanic',
-                    fontWeight: FontWeight.w800,
-                  ),
+                  style: TextStyle(
+                      fontSize: 10,
+                      fontFamily: 'uthmanic',
+                      fontWeight: FontWeight.w800,
+                      color: indexOfTheme != null
+                          ? primaryColors[indexOfTheme!]
+                          : Colors.black),
                 ),
                 Center(
                   child: Text(
@@ -46,20 +50,24 @@ class HeaderWidget extends StatelessWidget {
                       e["surah"],
                     ),
                     textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontFamily: "uthmanic",
-                      fontSize: 22,
-                    ),
+                    style: TextStyle(
+                        fontFamily: "uthmanic",
+                        fontSize: 22,
+                        color: indexOfTheme != null
+                            ? primaryColors[indexOfTheme!]
+                            : Colors.black),
                   ),
                 ),
                 Text(
                   "ترتيبها\n${e['surah']}",
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 10,
-                    fontFamily: 'uthmanic',
-                    fontWeight: FontWeight.w800,
-                  ),
+                  style: TextStyle(
+                      fontSize: 10,
+                      fontFamily: 'uthmanic',
+                      fontWeight: FontWeight.w800,
+                      color: indexOfTheme != null
+                          ? primaryColors[indexOfTheme!]
+                          : Colors.black),
                 )
               ],
             ),

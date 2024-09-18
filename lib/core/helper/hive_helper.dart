@@ -12,16 +12,6 @@ hiveHelperInit() async {
   }
 }
 
-// savedDateHive(String fieldName, dynamic value) async {
-//   try {
-//     var box = Hive.box('data');
-//     if (box.get(fieldName) == null) {
-//       await box.put(fieldName, value);
-//     }
-//   } catch (e) {
-//     print("Error saving data in Hive: $e");
-//   }
-// }
 savedDateHive(String fieldName, dynamic value) async {
   if (Hive.box('data').get(fieldName) == null) {
     await Hive.box('data').put(fieldName, value);
@@ -38,4 +28,8 @@ bool getHiveSavedDataBool(String fieldName, {bool defaultValue = false}) {
     return defaultValue;
   }
   return value;
+}
+
+updateHiveSavedData(fieldName, value) {
+  Hive.box('data').put(fieldName, value);
 }
