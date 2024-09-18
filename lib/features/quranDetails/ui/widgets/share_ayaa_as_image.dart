@@ -14,6 +14,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:quran/quran.dart';
 import 'package:quran_app/constant/colors.dart';
+import 'package:quran_app/constant/style.dart';
 import 'package:quran_app/core/helper/build_tafseer_spans.dart';
 import 'package:quran_app/core/helper/build_verse_spans.dart';
 import 'package:quran_app/core/helper/hive_helper.dart';
@@ -23,7 +24,6 @@ import 'package:quran_app/features/quranDetails/logic/translation/translationdat
 import 'package:quran_app/features/quranDetails/ui/widgets/basmala.dart';
 import 'package:quran_app/features/quranDetails/ui/widgets/header_widget.dart';
 import 'package:screenshot/screenshot.dart';
-import 'package:share_plus/share_plus.dart';
 
 class ShareAyaaAsImagepPage extends StatefulWidget {
   const ShareAyaaAsImagepPage({
@@ -128,6 +128,7 @@ class _ShareAyaaAsImagepPageState extends State<ShareAyaaAsImagepPage> {
                     setState(() {
                       firstVerse = newValue!;
                     });
+                    print(firstVerse);
                   },
                 ),
                 SizedBox(
@@ -150,6 +151,7 @@ class _ShareAyaaAsImagepPageState extends State<ShareAyaaAsImagepPage> {
                       setState(() {
                         lastVerse = newValue!;
                       });
+                      print(lastVerse);
                     }),
               ],
             ),
@@ -562,7 +564,7 @@ class _ShareAyaaAsImagepPageState extends State<ShareAyaaAsImagepPage> {
                                   widget.pageNumber != 1 &&
                                   widget.pageNumber != 187))
                                 Basmala(
-                                  index: indexOfTheme!,
+                                  index: indexOfTheme ?? 50,
                                 ),
                               SizedBox(height: 10.h),
                               SizedBox(
@@ -637,11 +639,7 @@ class _ShareAyaaAsImagepPageState extends State<ShareAyaaAsImagepPage> {
                                                     TextDirection.rtl,
                                                 text: TextSpan(
                                                     style: TextStyle(
-                                                      color:
-                                                          indexOfTheme != null
-                                                              ? primaryColors[
-                                                                  indexOfTheme!]
-                                                              : Colors.black,
+                                                      color: fiveColor,
                                                     ),
                                                     children: snapshot.hasData
                                                         ? snapshot.data

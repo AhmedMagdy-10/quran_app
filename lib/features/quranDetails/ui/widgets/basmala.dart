@@ -17,7 +17,7 @@ class Basmala extends StatelessWidget {
             bottom: 2),
         child: Image.asset(
           'assets/image/Basmala.png',
-          color: primaryColors[index] ?? Colors.black,
+          color: index == 50 ? Colors.black : primaryColors[index],
           width: MediaQuery.of(context).size.width * .4,
         ),
       ),

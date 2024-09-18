@@ -13,21 +13,33 @@ class CustomPageNumber extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0).w,
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: 8.w, horizontal: 20.h),
-        decoration: BoxDecoration(
-          color: fourColor,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Text(
-          "$index",
-          style: TextStyle(
-            fontSize: 18.sp,
-            fontWeight: FontWeight.bold,
-            color: const Color.fromARGB(255, 29, 169, 173),
+      padding: EdgeInsets.all(8.w),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.arrow_back_ios,
+            color: fiveColor,
           ),
-        ),
+          SizedBox(
+            width: 24.w,
+          ),
+          Text(
+            "$index",
+            style: TextStyle(
+              fontSize: 20.sp,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
+          ),
+          SizedBox(
+            width: 28.w,
+          ),
+          Icon(
+            Icons.arrow_forward_ios,
+            color: fiveColor,
+          ),
+        ],
       ),
     );
   }

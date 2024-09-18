@@ -14,7 +14,6 @@ import 'package:quran_app/features/quranDetails/ui/widgets/header_widget.dart';
 import 'package:quran_app/features/quranDetails/ui/widgets/quran_start.dart';
 import 'package:quran_app/features/quranDetails/ui/widgets/show_bottom_sheet_ayaa_feature.dart';
 import 'package:quran_app/features/quranDetails/ui/widgets/surah_header_name.dart';
-import 'package:quran_app/features/quranList/logic/models/surah_model.dart';
 
 import 'package:wakelock_plus/wakelock_plus.dart';
 
@@ -28,7 +27,7 @@ class SurahDetailsPage extends StatefulWidget {
     required this.shouldHighlightSura,
   });
   final int pageNumber;
-  final List<SurahModel> jsonData;
+  final dynamic jsonData;
   final bool shouldHighlightText;
   final String highlightVerse;
   final bool shouldHighlightSura;
@@ -112,6 +111,7 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: secondColor,
       body: PageView.builder(
         scrollDirection: Axis.horizontal,
         onPageChanged: (a) {
@@ -130,57 +130,43 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
             height: MediaQuery.sizeOf(context).height,
             child: Column(
               children: [
-                Container(
-                  height: MediaQuery.sizeOf(context).height * 0.15,
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.only(
-                      bottomLeft: Radius.circular(32),
-                      bottomRight: Radius.circular(32),
-                    ),
-                    color: secondColor,
-                    image: const DecorationImage(
-                      image: AssetImage(
-                        'assets/image/try2.png',
-                      ),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
+                SurahHeaderName(
+                  widget: widget,
+                  index: index,
                 ),
-
-                // SurahHeaderName(
-                //   widget: widget,
-                //   index: index,
-                // ),
-                // if (index == 1 || index == 2)
-                //   SizedBox(
-                //     height: MediaQuery.sizeOf(context).height * .15,
-                //   ),
+                if (index == 1 || index == 2)
+                  SizedBox(
+                    height: MediaQuery.sizeOf(context).height * .15,
+                  ),
                 SizedBox(
                   height: 15.h,
                 ),
                 Expanded(
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 4.h, vertical: 0),
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: Column(
-                        children: [
-                          RichText(
-                            locale: const Locale("ar"),
-                            key: richTextKeys[index - 1],
-                            textDirection: TextDirection.rtl,
-                            textAlign: (index == 1 || index == 2 || index > 570)
-                                ? TextAlign.center
-                                : TextAlign.center,
-                            softWrap: true,
-                            text: TextSpan(
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 26.sp,
-                                ),
-                                children: formatPageSpans(index)),
-                          ),
-                        ],
+                    child: SingleChildScrollView(
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: Column(
+                          children: [
+                            RichText(
+                              locale: const Locale("ar"),
+                              key: richTextKeys[index - 1],
+                              textDirection: TextDirection.rtl,
+                              textAlign:
+                                  (index == 1 || index == 2 || index > 570)
+                                      ? TextAlign.center
+                                      : TextAlign.center,
+                              softWrap: true,
+                              text: TextSpan(
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 26.sp,
+                                  ),
+                                  children: formatPageSpans(index)),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -270,13 +256,8 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
     String currentVerse = normalizeText(getVerse(surah, verse));
     String highlightVerseTrimmed = normalizeText(widget.highlightVerse);
 
-    print("Current Verse: '$currentVerse'");
-    print("Highlight Verse: '$highlightVerseTrimmed'");
-
     // Use `contains` instead of `==` to check if the highlight contains the current verse
     bool shouldHighlight = highlightVerseTrimmed.contains(currentVerse);
-
-    print("Should highlight: $shouldHighlight");
 
     if (widget.shouldHighlightText) {
       return (shouldHighlight || textSpan == " $surah$verse")

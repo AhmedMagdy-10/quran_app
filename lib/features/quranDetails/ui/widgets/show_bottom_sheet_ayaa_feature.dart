@@ -82,6 +82,9 @@ Future<dynamic> showBottomSheetAyaaFeature(
                                 textWidthBasis: TextWidthBasis.longestLine,
                                 locale: const Locale("ar"),
                                 text: TextSpan(
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                  ),
                                   children: buildVerseSpans(surahNumber,
                                       firstVerse, lastVerse, verseNumber, null),
                                 ),
@@ -169,6 +172,9 @@ Future<Object?> sharedAyaaOption(
                       textWidthBasis: TextWidthBasis.longestLine,
                       locale: const Locale("ar"),
                       text: TextSpan(
+                        style: const TextStyle(
+                          color: Colors.black,
+                        ),
                         children: buildVerseSpans(surahNumber, firstVerse,
                             lastVerse, verseNumber, null),
                       ),

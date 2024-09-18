@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:quran/quran.dart';
-import 'package:quran_app/constant/colors.dart';
 
 import '../../features/quranDetails/logic/translation/get_translation_data.dart'
     as translate;
