@@ -1,28 +1,24 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:quran/quran.dart';
 import 'package:quran_app/constant/colors.dart';
-import 'package:quran_app/constant/style.dart';
-import 'package:quran_app/core/helper/build_tafseer_spans.dart';
-import 'package:quran_app/core/helper/build_verse_spans.dart';
+
 import 'package:quran_app/core/helper/hive_helper.dart';
 import 'package:quran_app/core/helper/saved_and%20shared%20image.dart';
 import 'package:quran_app/core/helper/show_toast_state.dart';
 import 'package:quran_app/features/quranDetails/logic/translation/translationdata.dart';
-import 'package:quran_app/features/quranDetails/ui/widgets/basmala.dart';
-import 'package:quran_app/features/quranDetails/ui/widgets/header_widget.dart';
+import 'package:quran_app/features/quranDetails/ui/widgets/show_tafsser_sheet_books.dart';
+
+import 'package:quran_app/features/quranDetails/ui/widgets/surah_screen_shot.dart';
 import 'package:screenshot/screenshot.dart';
 
 class ShareAyaaAsImagepPage extends StatefulWidget {
@@ -128,7 +124,7 @@ class _ShareAyaaAsImagepPageState extends State<ShareAyaaAsImagepPage> {
                     setState(() {
                       firstVerse = newValue!;
                     });
-                    print(firstVerse);
+                    print('First Verse: $firstVerse, Last Verse: $lastVerse');
                   },
                 ),
                 SizedBox(
@@ -146,13 +142,18 @@ class _ShareAyaaAsImagepPageState extends State<ShareAyaaAsImagepPage> {
                   width: 10.w,
                 ),
                 customBuildDropdown(
-                    value: lastVerse,
-                    onChanged: (newValue) {
-                      setState(() {
-                        lastVerse = newValue!;
-                      });
-                      print(lastVerse);
-                    }),
+                  value: lastVerse,
+                  onChanged: (newValue) {
+                    if (newValue != null && newValue < firstVerse) {
+                      // Prevent lastVerse from being less than firstVerse
+                      return;
+                    }
+                    setState(() {
+                      lastVerse = newValue!;
+                    });
+                    print('First Verse: $firstVerse, Last Verse: $lastVerse');
+                  },
+                ),
               ],
             ),
             SizedBox(
@@ -199,229 +200,159 @@ class _ShareAyaaAsImagepPageState extends State<ShareAyaaAsImagepPage> {
               height: 15.h,
             ),
             if (getHiveSavedData('addTafseerImage') == true)
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: 10.h,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      showMaterialModalBottomSheet(
-                        enableDrag: true,
-                        animationCurve: Curves.easeInOutQuart,
-                        elevation: 0,
-                        bounce: true,
-                        duration: const Duration(milliseconds: 150),
-                        backgroundColor: Colors.white,
-                        context: context,
-                        builder: (context) {
-                          return SizedBox(
-                            height: MediaQuery.sizeOf(context).height * 0.8,
-                            width: double.infinity,
-                            child: Padding(
-                              padding: EdgeInsets.all(8.0.w),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    " كتب التفسير",
-                                    style: TextStyle(
-                                      fontSize: 22.sp,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 10.h,
-                                  ),
-                                  Expanded(
-                                    child: ListView.separated(
-                                        itemBuilder: (context, index) {
-                                          return Container(
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                              color: index ==
-                                                      getHiveSavedData(
-                                                          "addTafseerValue")
-                                                  ? specialColor
-                                                      .withOpacity(0.5)
-                                                  : Colors.transparent,
-                                            ),
-                                            child: InkWell(
-                                              onTap: () async {
-                                                if (isDownloading !=
-                                                    translationDataList[index]
-                                                        .url) {
-                                                  if (File("${appDir!.path}/${translationDataList[index].typeText}.json")
-                                                          .existsSync() ||
-                                                      index == 0 ||
-                                                      index == 10) {
-                                                    updateHiveSavedData(
-                                                        'addTafseerValue',
-                                                        index);
-                                                    setState(() {});
-                                                  } else {
-                                                    PermissionStatus status =
-                                                        await Permission.storage
-                                                            .request();
-
-                                                    await Permission
-                                                        .accessMediaLocation
-                                                        .request();
-                                                    PermissionStatus status2 =
-                                                        await Permission
-                                                            .manageExternalStorage
-                                                            .request();
-                                                    print(
-                                                        'status $status   -> $status2');
-                                                    if (status.isGranted &&
-                                                        status2.isGranted) {
-                                                      print(true);
-                                                    } else if (status
-                                                            .isPermanentlyDenied &&
-                                                        status2
-                                                            .isPermanentlyDenied) {
-                                                      await openAppSettings();
-                                                    } else if (status
-                                                        .isDenied) {
-                                                      print(
-                                                          'Premission is denied');
-                                                    }
-                                                    Dio()
-                                                        .download(
-                                                            translationDataList[
-                                                                    index]
-                                                                .url,
-                                                            "${appDir!.path}/${translationDataList[index].typeText}.json")
-                                                        .then((e) {
-                                                      showToast(
-                                                          text:
-                                                              'تم تنزيل الكتاب بنجح',
-                                                          state: ToastStates
-                                                              .success);
-                                                      updateHiveSavedData(
-                                                          'addTafseerValue',
-                                                          index);
-                                                    }).catchError((e) {
-                                                      showToast(
-                                                          text:
-                                                              'تحقق من اتصالك بنترنت',
-                                                          state: ToastStates
-                                                              .error);
-                                                    });
-                                                  }
-                                                  setState(() {});
-
-                                                  getTranslationData();
-                                                }
-                                                setState(() {});
-
-                                                if (mounted) {
-                                                  Navigator.pop(context);
-                                                }
-                                              },
-                                              child: Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 20.w,
-                                                    vertical: 8.h),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Expanded(
-                                                      child: Text(
-                                                        translationDataList[
-                                                                index]
-                                                            .typeTextInRelatedLanguage,
-                                                        textDirection:
-                                                            TextDirection.rtl,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        style: TextStyle(
-                                                          fontFamily: 'Cairo',
-                                                          fontSize: 18.sp,
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    isDownloading !=
-                                                            translationDataList[
-                                                                    index]
-                                                                .url
-                                                        ? Icon(index == 0 ||
-                                                                index == 10
-                                                            ? Icons
-                                                                .storage_rounded
-                                                            : File("${appDir!.path}/${translationDataList[index].typeText}.json")
-                                                                    .existsSync()
-                                                                ? Icons.done_all
-                                                                : Icons
-                                                                    .cloud_download_rounded)
-                                                        : const SpinKitWaveSpinner(
-                                                            color: Colors.white,
-                                                            size: 30,
-                                                          )
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                        separatorBuilder: (context, index) =>
-                                            Divider(
-                                              color: fiveColor,
-                                            ),
-                                        itemCount: translationDataList.length),
-                                  )
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      );
-                    },
-                    child: Container(
-                      height: 45.h,
-                      width: MediaQuery.sizeOf(context).width * 0.9,
-                      decoration: BoxDecoration(
-                          color: specialColor.withOpacity(0.5),
-                          borderRadius: BorderRadius.circular(12)),
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16.0.w),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              translationDataList[
-                                      getHiveSavedData("addTafseerValue") ?? 0]
-                                  .typeTextInRelatedLanguage,
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16.sp,
-                                  fontFamily: translationDataList[
-                                                  getHiveSavedData(
-                                                          "addTafseerValue") ??
-                                                      0]
-                                              .typeInNativeLanguage ==
-                                          "العربية"
-                                      ? "cairo"
-                                      : "roboto"),
-                            ),
-                            Icon(
-                              Icons.more_horiz_outlined,
-                              size: 24.sp,
-                              color: Colors.black,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+              AvailabeTafsserBooksSheet(
+                isDownloading: isDownloading,
+                appDir: appDir!,
+                getTranslationData: getTranslationData(),
               ),
+            // Row(
+            //   crossAxisAlignment: CrossAxisAlignment.start,
+            //   children: [
+            //     SizedBox(
+            //       height: 10.h,
+            //     ),
+            //     InkWell(
+            //       onTap: () {
+            //         showMaterialModalBottomSheet(
+            //           enableDrag: true,
+            //           animationCurve: Curves.easeInOutQuart,
+            //           elevation: 0,
+            //           bounce: true,
+            //           duration: const Duration(milliseconds: 150),
+            //           backgroundColor: Colors.white,
+            //           context: context,
+            //           builder: (context) {
+            //             return SizedBox(
+            //               height: MediaQuery.sizeOf(context).height * 0.8,
+            //               width: double.infinity,
+            //               child: Padding(
+            //                 padding: EdgeInsets.all(8.0.w),
+            //                 child: Column(
+            //                   mainAxisSize: MainAxisSize.min,
+            //                   crossAxisAlignment: CrossAxisAlignment.center,
+            //                   children: [
+            //                     Text(
+            //                       " كتب التفسير",
+            //                       style: TextStyle(
+            //                         fontSize: 22.sp,
+            //                       ),
+            //                     ),
+            //                     SizedBox(
+            //                       height: 10.h,
+            //                     ),
+            //                     Expanded(
+            //                       child: ListView.separated(
+            //                           itemBuilder: (context, index) {
+            //                             return Container(
+            //                               decoration: BoxDecoration(
+            //                                 borderRadius:
+            //                                     BorderRadius.circular(12),
+            //                                 color: index ==
+            //                                         getHiveSavedData(
+            //                                             "addTafseerValue")
+            //                                     ? specialColor
+            //                                         .withOpacity(0.5)
+            //                                     : Colors.transparent,
+            //                               ),
+            //                               child: InkWell(
+            //                                 onTap: () async {
+            //                                   await downLoadTafsserBook(
+            //                                       index, context);
+            //                                 },
+            //                                 child: Padding(
+            //                                   padding: EdgeInsets.symmetric(
+            //                                       horizontal: 20.w,
+            //                                       vertical: 8.h),
+            //                                   child: Row(
+            //                                     mainAxisAlignment:
+            //                                         MainAxisAlignment
+            //                                             .spaceBetween,
+            //                                     children: [
+            //                                       Expanded(
+            //                                         child: Text(
+            //                                           translationDataList[
+            //                                                   index]
+            //                                               .typeTextInRelatedLanguage,
+            //                                           textDirection:
+            //                                               TextDirection.rtl,
+            //                                           overflow: TextOverflow
+            //                                               .ellipsis,
+            //                                           style: TextStyle(
+            //                                             fontFamily: 'Cairo',
+            //                                             fontSize: 18.sp,
+            //                                             fontWeight:
+            //                                                 FontWeight.w500,
+            //                                           ),
+            //                                         ),
+            //                                       ),
+            //                                       isDownloading !=
+            //                                               translationDataList[
+            //                                                       index]
+            //                                                   .url
+            //                                           ? Icon(index == 0 ||
+            //                                                   index == 10
+            //                                               ? Icons
+            //                                                   .storage_rounded
+            //                                               : File("${appDir!.path}/${translationDataList[index].typeText}.json")
+            //                                                       .existsSync()
+            //                                                   ? Icons.done_all
+            //                                                   : Icons
+            //                                                       .cloud_download_rounded)
+            //                                           : const SpinKitWaveSpinner(
+            //                                               color: Colors.white,
+            //                                               size: 30,
+            //                                             )
+            //                                     ],
+            //                                   ),
+            //                                 ),
+            //                               ),
+            //                             );
+            //                           },
+            //                           separatorBuilder: (context, index) =>
+            //                               Divider(
+            //                                 color: fiveColor,
+            //                               ),
+            //                           itemCount: translationDataList.length),
+            //                     )
+            //                   ],
+            //                 ),
+            //               ),
+            //             );
+            //           },
+            //         );
+            //       },
+            //       child: Container(
+            //         height: 45.h,
+            //         width: MediaQuery.sizeOf(context).width * 0.9,
+            //         decoration: BoxDecoration(
+            //             color: specialColor.withOpacity(0.5),
+            //             borderRadius: BorderRadius.circular(12)),
+            //         child: Padding(
+            //           padding: EdgeInsets.symmetric(horizontal: 16.0.w),
+            //           child: Row(
+            //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //             children: [
+            //               Text(
+            //                 translationDataList[
+            //                         getHiveSavedData("addTafseerValue") ?? 0]
+            //                     .typeTextInRelatedLanguage,
+            //                 style: TextStyle(
+            //                     color: Colors.black,
+            //                     fontSize: 16.sp,
+            //                     fontFamily: 'Cairo'),
+            //               ),
+            //               Icon(
+            //                 Icons.more_horiz_outlined,
+            //                 size: 24.sp,
+            //                 color: Colors.black,
+            //               ),
+            //             ],
+            //           ),
+            //         ),
+            //       ),
+            //     ),
+            //   ],
+            // ),
 
             SizedBox(
               height: 15.w,
@@ -544,139 +475,12 @@ class _ShareAyaaAsImagepPageState extends State<ShareAyaaAsImagepPage> {
                     ],
                   ),
                   child: RepaintBoundary(
-                    child: Screenshot(
-                      controller: screenshotController,
-                      child: Container(
-                        color: indexOfTheme != null
-                            ? backgroundColors[indexOfTheme!]
-                            : kprimaryColor,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: Column(
-                            children: [
-                              SizedBox(height: 10.h),
-                              HeaderWidget(
-                                e: {"surah": widget.surahNumber},
-                                jsonData: '',
-                                indexOfTheme: indexOfTheme,
-                              ),
-                              if ((widget.firstVerse == 1 &&
-                                  widget.pageNumber != 1 &&
-                                  widget.pageNumber != 187))
-                                Basmala(
-                                  index: indexOfTheme ?? 50,
-                                ),
-                              SizedBox(height: 10.h),
-                              SizedBox(
-                                width: MediaQuery.sizeOf(context).width,
-                                child: RichText(
-                                  textDirection: TextDirection.rtl,
-                                  textAlign: TextAlign.center,
-                                  textWidthBasis: TextWidthBasis.longestLine,
-                                  locale: const Locale("ar"),
-                                  text: TextSpan(
-                                    style: TextStyle(
-                                      color: indexOfTheme != null
-                                          ? primaryColors[indexOfTheme!]
-                                          : Colors.black,
-                                    ),
-                                    children: buildVerseSpans(
-                                        widget.surahNumber,
-                                        firstVerse,
-                                        lastVerse,
-                                        widget.verseNumber,
-                                        indexOfTheme),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 15.h,
-                              ),
-                              if (getHiveSavedData('addTafseerImage') == true)
-                                Padding(
-                                  padding: EdgeInsets.all(6.w),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        translationDataList[getHiveSavedData(
-                                                    "addTafseerValue") ??
-                                                0]
-                                            .typeTextInRelatedLanguage,
-                                        style: TextStyle(
-                                          color: threeColor,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 5.h,
-                                      ),
-                                      FutureBuilder(
-                                        future: buildTafseerSpans(
-                                            widget.surahNumber,
-                                            widget.firstVerse,
-                                            widget.lastVerse,
-                                            translationDataList[
-                                                getHiveSavedData(
-                                                    "addTafseerValue")],
-                                            indexOfTheme),
-                                        initialData: [],
-                                        builder:
-                                            (context, AsyncSnapshot snapshot) =>
-                                                Container(
-                                          width:
-                                              MediaQuery.sizeOf(context).width,
-                                          decoration: BoxDecoration(
-                                            color: secondColor,
-                                            borderRadius:
-                                                BorderRadius.circular(8),
-                                          ),
-                                          child: Padding(
-                                            padding: EdgeInsets.all(8.w),
-                                            child: RichText(
-                                                textDirection:
-                                                    TextDirection.rtl,
-                                                text: TextSpan(
-                                                    style: TextStyle(
-                                                      color: fiveColor,
-                                                    ),
-                                                    children: snapshot.hasData
-                                                        ? snapshot.data
-                                                        : null)),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'بواسطه تطبيق نوري',
-                                    style: TextStyle(
-                                        color: threeColor,
-                                        fontSize: 10,
-                                        fontFamily: 'taha'),
-                                  ),
-                                  SizedBox(
-                                    width: 5.w,
-                                  ),
-                                  CircleAvatar(
-                                    backgroundImage: const AssetImage(
-                                      'assets/image/ic_launcher.png',
-                                    ),
-                                    radius: 10,
-                                    backgroundColor: secondColor,
-                                    foregroundColor: Colors.grey,
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
+                    child: SurahScreenshot(
+                      screenshotController: screenshotController,
+                      indexOfTheme: indexOfTheme,
+                      widget: widget,
+                      firstVerse: firstVerse,
+                      lastVerse: lastVerse,
                     ),
                   ),
                 ),
@@ -691,6 +495,7 @@ class _ShareAyaaAsImagepPageState extends State<ShareAyaaAsImagepPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             FloatingActionButton(
+              heroTag: 'saveImage',
               shape: const CircleBorder(),
               onPressed: () async {
                 setState(() {
@@ -707,13 +512,15 @@ class _ShareAyaaAsImagepPageState extends State<ShareAyaaAsImagepPage> {
                   isShooting = false;
                 });
               },
-              backgroundColor: fiveColor,
+              backgroundColor: Colors.blue,
               child: const Icon(
                 Icons.image_outlined,
                 color: Colors.white,
+                size: 30,
               ),
             ),
             FloatingActionButton(
+              heroTag: 'shareImage',
               shape: const CircleBorder(),
               onPressed: () async {
                 setState(() {
@@ -728,10 +535,11 @@ class _ShareAyaaAsImagepPageState extends State<ShareAyaaAsImagepPage> {
                   isShooting = false;
                 });
               },
-              backgroundColor: fiveColor,
+              backgroundColor: Colors.blue,
               child: const Icon(
                 Icons.camera_alt_outlined,
                 color: Colors.white,
+                size: 30,
               ),
             ),
           ],
@@ -740,16 +548,63 @@ class _ShareAyaaAsImagepPageState extends State<ShareAyaaAsImagepPage> {
     );
   }
 
+  Future<void> downLoadTafsserBook(int index, BuildContext context) async {
+    PermissionStatus storageStatus = await Permission.storage.request();
+    PermissionStatus mediaStatus =
+        await Permission.accessMediaLocation.request();
+    PermissionStatus manageStatus =
+        await Permission.manageExternalStorage.request();
+    final fileExists =
+        File("${appDir!.path}/${translationDataList[index].typeText}.json")
+            .existsSync();
+    final translation = translationDataList[index];
+
+    if (isDownloading != translation.url) {
+      if (fileExists || index == 0 || index == 10) {
+        updateHiveSavedData('addTafseerValue', index);
+        setState(() {});
+      } else {
+        if (storageStatus.isGranted && manageStatus.isGranted) {
+        } else if (storageStatus.isPermanentlyDenied &&
+            manageStatus.isPermanentlyDenied) {
+          await openAppSettings();
+        } else if (storageStatus.isDenied) {
+          print('Premission is denied');
+        }
+        Dio()
+            .download(
+                translation.url, "${appDir!.path}/${translation.typeText}.json")
+            .then((e) {
+          showToast(text: 'تم تنزيل الكتاب بنجح', state: ToastStates.success);
+          updateHiveSavedData('addTafseerValue', index);
+        }).catchError((e) {
+          showToast(text: 'تحقق من اتصالك بنترنت', state: ToastStates.error);
+        });
+      }
+      setState(() {});
+
+      getTranslationData();
+    }
+    setState(() {});
+
+    if (mounted) {
+      Navigator.pop(context);
+    }
+  }
+
   Widget customBuildDropdown(
       {required int value, required Function(int?)? onChanged}) {
     return Material(
       child: DropdownButton<int>(
-        dropdownColor: Colors.grey[300],
+        dropdownColor: kprimaryColor,
+        borderRadius: BorderRadius.circular(12),
         items: List.generate(
           getVerseCount(widget.surahNumber),
           (index) => DropdownMenuItem<int>(
             value: index + 1,
-            child: Text("${index + 1}"),
+            child: Text(
+              "${index + 1}",
+            ),
           ),
         ),
         value: value,

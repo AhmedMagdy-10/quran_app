@@ -20,27 +20,28 @@ Future<List<InlineSpan>> buildTafseerSpans(
     String text = await translate.getVerseTranslation(
         surahNumber, verseNumber, translatee);
     text = text.replaceAll("<p>", "\n").replaceAll("</p>", "");
+
     TextSpan translateSpan = TextSpan(
       text: text,
-      // recognizer: LongPressGestureRecognizer()..onLongPress = () {},
       style: TextStyle(
         fontSize: 14.sp,
         fontFamily: "taha",
-        // fontFamily: getValue("selectedFontFamily"),
       ),
     );
 
+    if (verseNumber > firstVerseNumber) {
+      TextSpan dividerSpan = TextSpan(
+        text: '\n———\n',
+        style: TextStyle(
+          fontSize: 14.sp,
+          fontFamily: "taha",
+          color: Colors.blue,
+        ),
+      );
+      tafseerSpans.add(dividerSpan);
+    }
+
     tafseerSpans.add(translateSpan);
-    // tafseerSpans.add(
-    //   TextSpan(
-    //       locale: const Locale("ar"),
-    //       text:
-    //           " ${convertToArabicNumber((verseNumber).toString())} " //               quran.getVerseEndSymbol()
-    //       ,
-    //       style: const TextStyle(
-    //         color: secondaryColors[indexOfTheme],
-    //       )),
-    // );
   }
 
   return tafseerSpans;

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:quran_app/features/home/logic/model/feature_model.dart';
 import 'package:quran_app/features/home/ui/widgets/home_page_body.dart';
-import 'package:quran_app/features/quranList/ui/quran_surahs_page.dart';
+import 'package:quran_app/features/quranList/ui/quran_surahs_list.dart';
 
 import '../../../../generated/l10n.dart';
 
