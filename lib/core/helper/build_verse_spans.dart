@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:quran/quran.dart';
 
 List<InlineSpan> buildVerseSpans(int surahNumber, int firstVerseNumber,
@@ -23,7 +22,6 @@ List<InlineSpan> buildVerseSpans(int surahNumber, int firstVerseNumber,
       // recognizer: LongPressGestureRecognizer()..onLongPress = () {},
       style: TextStyle(
         overflow: TextOverflow.ellipsis,
-        fontSize: 21.sp,
         wordSpacing: 0,
         letterSpacing: 0,
         fontFamily: "QCF_P${pageNumber.toString().padLeft(3, "0")}",

@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -7,7 +6,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:quran/quran.dart';
 import 'package:quran_app/constant/colors.dart';
@@ -29,6 +27,9 @@ class ShareAyaaAsImagepPage extends StatefulWidget {
     required this.surahNumber,
     required this.verseNumber,
     required this.pageNumber,
+    required this.appDir,
+    required this.getTranslationData,
+    required this.isDownloading,
   });
 
   final int firstVerse;
@@ -36,6 +37,9 @@ class ShareAyaaAsImagepPage extends StatefulWidget {
   final int surahNumber;
   final int verseNumber;
   final int pageNumber;
+  final Directory appDir;
+  final String isDownloading;
+  final dynamic getTranslationData;
 
   @override
   State<ShareAyaaAsImagepPage> createState() => _ShareAyaaAsImagepPageState();
@@ -46,41 +50,14 @@ class _ShareAyaaAsImagepPageState extends State<ShareAyaaAsImagepPage> {
   late int lastVerse;
   ScreenshotController screenshotController = ScreenshotController();
 
-  var dataOfCurrentTranslation;
-
-  var isDownloading = "";
-
-  getTranslationData() async {
-    if (getHiveSavedData("indexOfTranslationInVerseByVerse") > 1) {
-      File file = File(
-          "${appDir!.path}/${translationDataList[getHiveSavedData("indexOfTranslationInVerseByVerse")].typeText}.json");
-
-      String jsonData = await file.readAsString();
-      dataOfCurrentTranslation = json.decode(jsonData);
-    }
-    setState(() {});
-  }
-
-  bool isShooting = false;
-
-  Directory? appDir;
-  initializeDirectory() async {
-    appDir = await getTemporaryDirectory();
-    getTranslationData();
-    if (mounted) {
-      setState(() {});
-    }
-  }
-
   @override
   void initState() {
-    getTranslationData();
     firstVerse = widget.firstVerse;
     lastVerse = widget.lastVerse;
     super.initState();
-    initializeDirectory();
   }
 
+  bool isShooting = false;
   int? indexOfTheme;
 
   @override
@@ -201,9 +178,9 @@ class _ShareAyaaAsImagepPageState extends State<ShareAyaaAsImagepPage> {
             ),
             if (getHiveSavedData('addTafseerImage') == true)
               AvailabeTafsserBooksSheet(
-                isDownloading: isDownloading,
-                appDir: appDir!,
-                getTranslationData: getTranslationData(),
+                isDownloading: widget.isDownloading,
+                appDir: widget.appDir,
+                getTranslationData: widget.getTranslationData,
               ),
             // Row(
             //   crossAxisAlignment: CrossAxisAlignment.start,
@@ -548,49 +525,49 @@ class _ShareAyaaAsImagepPageState extends State<ShareAyaaAsImagepPage> {
     );
   }
 
-  Future<void> downLoadTafsserBook(int index, BuildContext context) async {
-    PermissionStatus storageStatus = await Permission.storage.request();
-    PermissionStatus mediaStatus =
-        await Permission.accessMediaLocation.request();
-    PermissionStatus manageStatus =
-        await Permission.manageExternalStorage.request();
-    final fileExists =
-        File("${appDir!.path}/${translationDataList[index].typeText}.json")
-            .existsSync();
-    final translation = translationDataList[index];
+//   Future<void> downLoadTafsserBook(int index, BuildContext context) async {
+//     PermissionStatus storageStatus = await Permission.storage.request();
+//     PermissionStatus mediaStatus =
+//         await Permission.accessMediaLocation.request();
+//     PermissionStatus manageStatus =
+//         await Permission.manageExternalStorage.request();
+//     final fileExists = File(
+//             "${widget.appDir.path}/${translationDataList[index].typeText}.json")
+//         .existsSync();
+//     final translation = translationDataList[index];
 
-    if (isDownloading != translation.url) {
-      if (fileExists || index == 0 || index == 10) {
-        updateHiveSavedData('addTafseerValue', index);
-        setState(() {});
-      } else {
-        if (storageStatus.isGranted && manageStatus.isGranted) {
-        } else if (storageStatus.isPermanentlyDenied &&
-            manageStatus.isPermanentlyDenied) {
-          await openAppSettings();
-        } else if (storageStatus.isDenied) {
-          print('Premission is denied');
-        }
-        Dio()
-            .download(
-                translation.url, "${appDir!.path}/${translation.typeText}.json")
-            .then((e) {
-          showToast(text: 'تم تنزيل الكتاب بنجح', state: ToastStates.success);
-          updateHiveSavedData('addTafseerValue', index);
-        }).catchError((e) {
-          showToast(text: 'تحقق من اتصالك بنترنت', state: ToastStates.error);
-        });
-      }
-      setState(() {});
+//     if (widget.isDownloading != translation.url) {
+//       if (fileExists || index == 0 || index == 10) {
+//         updateHiveSavedData('addTafseerValue', index);
+//         setState(() {});
+//       } else {
+//         if (storageStatus.isGranted && manageStatus.isGranted) {
+//         } else if (storageStatus.isPermanentlyDenied &&
+//             manageStatus.isPermanentlyDenied) {
+//           await openAppSettings();
+//         } else if (storageStatus.isDenied) {
+//           print('Premission is denied');
+//         }
+//         Dio()
+//             .download(translation.url,
+//                 "${widget.appDir.path}/${translation.typeText}.json")
+//             .then((e) {
+//           showToast(text: 'تم تنزيل الكتاب بنجح', state: ToastStates.success);
+//           updateHiveSavedData('addTafseerValue', index);
+//         }).catchError((e) {
+//           showToast(text: 'تحقق من اتصالك بنترنت', state: ToastStates.error);
+//         });
+//       }
+//       setState(() {});
 
-      getTranslationData();
-    }
-    setState(() {});
+//       widget.getTranslationData;
+//     }
+//     setState(() {});
 
-    if (mounted) {
-      Navigator.pop(context);
-    }
-  }
+//     if (mounted) {
+//       Navigator.pop(context);
+//     }
+//   }
 
   Widget customBuildDropdown(
       {required int value, required Function(int?)? onChanged}) {

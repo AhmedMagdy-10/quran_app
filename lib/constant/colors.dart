@@ -95,9 +95,9 @@ const List highlightColors = [
 
 ThemeData lightTheme(BuildContext context) => ThemeData(
       // fontFamily: 'Cairo',
-      scaffoldBackgroundColor: secondColor,
+      scaffoldBackgroundColor: kprimaryColor,
       appBarTheme: AppBarTheme(
-        backgroundColor: secondColor,
+        backgroundColor: kprimaryColor,
         titleTextStyle: TextStyle(
           color: fourColor,
           fontSize: responsiveFontSize(context, fontSize: 32),

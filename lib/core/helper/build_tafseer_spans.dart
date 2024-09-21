@@ -6,11 +6,11 @@ import '../../features/quranDetails/logic/translation/get_translation_data.dart'
     as translate;
 
 Future<List<InlineSpan>> buildTafseerSpans(
-    int surahNumber,
-    int firstVerseNumber,
-    int lastVerseNumber,
-    translatee,
-    int? indexOfTheme) async {
+  int surahNumber,
+  int firstVerseNumber,
+  int lastVerseNumber,
+  translatee,
+) async {
   List<InlineSpan> tafseerSpans = [];
 
   for (int verseNumber = firstVerseNumber;
@@ -23,9 +23,8 @@ Future<List<InlineSpan>> buildTafseerSpans(
 
     TextSpan translateSpan = TextSpan(
       text: text,
-      style: TextStyle(
-        fontSize: 14.sp,
-        fontFamily: "taha",
+      style: const TextStyle(
+        fontFamily: "roboto",
       ),
     );
 

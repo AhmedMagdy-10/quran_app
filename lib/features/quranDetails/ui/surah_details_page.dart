@@ -1,12 +1,17 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:quran/quran.dart';
 import 'package:quran_app/constant/colors.dart';
 import 'package:quran_app/constant/style.dart';
+import 'package:quran_app/core/helper/hive_helper.dart';
+import 'package:quran_app/features/quranDetails/logic/translation/translationdata.dart';
 import 'package:quran_app/features/quranDetails/ui/widgets/basmala.dart';
 import 'package:quran_app/features/quranDetails/ui/widgets/custom_page_namber.dart';
 import 'package:quran_app/features/quranDetails/ui/widgets/header_widget.dart';
@@ -47,6 +52,7 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
   late String juz;
 
   List<GlobalKey> richTextKeys = List.generate(604, (_) => GlobalKey());
+
   void highlightVerseFunction() {
     setState(() {
       shouldHighlightText = widget.shouldHighlightText;
@@ -89,6 +95,7 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
 
   @override
   void initState() {
+    getTranslationData();
     shouldHighlightSura = widget.shouldHighlightSura;
     index = widget.pageNumber;
     _pageController = PageController(initialPage: index);
@@ -97,7 +104,7 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
     WakelockPlus.enable();
     highlightVerseFunction();
     changeHighlightSurah();
-
+    initializeDirectory();
     super.initState();
     print(index);
   }
@@ -106,6 +113,29 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
   void dispose() {
     WakelockPlus.disable();
     super.dispose();
+  }
+
+  var dataOfCurrentTranslation;
+
+  getTranslationData() async {
+    if (getHiveSavedData("indexOfTranslationInVerseByVerse") > 1) {
+      File file = File(
+          "${appDir!.path}/${translationDataList[getHiveSavedData("indexOfTranslationInVerseByVerse")].typeText}.json");
+
+      String jsonData = await file.readAsString();
+      dataOfCurrentTranslation = json.decode(jsonData);
+    }
+    setState(() {});
+  }
+
+  Directory? appDir;
+
+  initializeDirectory() async {
+    appDir = await getTemporaryDirectory();
+    getTranslationData();
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override
@@ -119,6 +149,7 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
             textSpan = "";
           });
           index = a;
+          print(a);
         },
         controller: _pageController,
         itemCount: totalPagesCount + 1,
@@ -200,6 +231,8 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
             recognizer: LongPressGestureRecognizer()
               ..onLongPress = () {
                 showBottomSheetAyaaFeature(
+                  appDir: appDir!,
+                  getTranslationData: dataOfCurrentTranslation,
                   context,
                   index: index,
                   surahNumber: e['surah'],

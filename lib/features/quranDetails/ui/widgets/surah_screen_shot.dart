@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:quran_app/constant/colors.dart';
 import 'package:quran_app/core/components/app_logo.dart';
-import 'package:quran_app/core/helper/build_tafseer_spans.dart';
 import 'package:quran_app/core/helper/build_verse_spans.dart';
 import 'package:quran_app/core/helper/hive_helper.dart';
 import 'package:quran_app/features/quranDetails/logic/translation/translationdata.dart';
 import 'package:quran_app/features/quranDetails/ui/widgets/basmala.dart';
 import 'package:quran_app/features/quranDetails/ui/widgets/header_widget.dart';
 import 'package:quran_app/features/quranDetails/ui/widgets/share_ayaa_as_image.dart';
+import 'package:quran_app/features/quranDetails/ui/widgets/tafsser_text.dart';
 import 'package:screenshot/screenshot.dart';
 
 class SurahScreenshot extends StatelessWidget {
@@ -62,6 +61,7 @@ class SurahScreenshot extends StatelessWidget {
                   locale: const Locale("ar"),
                   text: TextSpan(
                     style: TextStyle(
+                      fontSize: 21.sp,
                       color: indexOfTheme != null
                           ? primaryColors[indexOfTheme!]
                           : Colors.black,
@@ -92,50 +92,11 @@ class SurahScreenshot extends StatelessWidget {
                       SizedBox(
                         height: 5.h,
                       ),
-                      FutureBuilder(
-                        future: buildTafseerSpans(
-                            widget.surahNumber,
-                            firstVerse,
-                            lastVerse,
-                            translationDataList[
-                                getHiveSavedData("addTafseerValue")],
-                            indexOfTheme),
-                        builder: (context,
-                            AsyncSnapshot<List<InlineSpan>> snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const SpinKitWaveSpinner(
-                              color: Colors.white,
-                              size: 30,
-                            );
-                          } else if (snapshot.hasError) {
-                            return const Text(
-                                'حدث خطأ في تحميل التقسير حاول مره اخري');
-                          } else if (!snapshot.hasData ||
-                              snapshot.data!.isEmpty) {
-                            return const Text('لا يوجد تفسير متاح الان');
-                          } else {
-                            return Container(
-                              width: MediaQuery.sizeOf(context).width,
-                              decoration: BoxDecoration(
-                                color: secondColor,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Padding(
-                                padding: EdgeInsets.all(8.w),
-                                child: RichText(
-                                  textDirection: TextDirection.rtl,
-                                  text: TextSpan(
-                                    style: TextStyle(
-                                      color: fiveColor,
-                                    ),
-                                    children: snapshot.data,
-                                  ),
-                                ),
-                              ),
-                            );
-                          }
-                        },
+                      FutureBuildTafseerText(
+                        surahNumber: widget.surahNumber,
+                        firstVerse: firstVerse,
+                        lastVerse: lastVerse,
+                        indexOfTheme: indexOfTheme,
                       ),
                     ],
                   ),

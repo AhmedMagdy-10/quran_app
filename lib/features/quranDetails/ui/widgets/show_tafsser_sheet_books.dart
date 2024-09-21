@@ -32,13 +32,13 @@ class _AvailabeTafsserBooksSheetState extends State<AvailabeTafsserBooksSheet> {
   @override
   Widget build(BuildContext context) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         SizedBox(
           height: 10.h,
         ),
         InkWell(
-          onTap: () {
+          onTap: () async {
             showMaterialModalBottomSheet(
               enableDrag: true,
               animationCurve: Curves.easeInOutQuart,
