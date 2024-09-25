@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:quran_app/constant/colors.dart';
 import 'package:quran_app/core/components/initialize_local_data.dart';
+import 'package:quran_app/core/components/observer.dart';
 import 'package:quran_app/core/helper/cache_helper.dart';
 import 'package:quran_app/core/helper/hive_helper.dart';
 import 'package:quran_app/features/splash/ui/splash_page.dart';
@@ -12,12 +14,14 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await CacheHelper.init();
   bool? mode = CacheHelper.getSaveData(key: 'isDark');
+  Bloc.observer = Observer();
   await hiveHelperInit();
   await localHiveData();
   print(getHiveSavedDataBool('addTafseerIamge'));
   runApp(MyApp(
     mode: mode,
   ));
+  print(mode);
 }
 
 class MyApp extends StatelessWidget {
@@ -42,11 +46,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: lightTheme(context),
         darkTheme: darkTheme(context),
-        themeMode: mode == null
-            ? ThemeMode.system
-            : mode == true
-                ? ThemeMode.dark
-                : ThemeMode.light,
+        themeMode: ThemeMode.light,
         home: const SplashView(),
       ),
     );

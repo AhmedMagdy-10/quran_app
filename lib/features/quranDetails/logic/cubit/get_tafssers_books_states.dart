@@ -1,13 +1,52 @@
-abstract class GetTafssersBooksStates {}
+import 'package:just_audio/just_audio.dart';
+import 'package:quran_app/features/quranDetails/logic/models/reciter_model.dart';
 
-class InitialGetTafssersBookState extends GetTafssersBooksStates {}
+abstract class QuranPagePlayerState {}
 
-class GetTafssersBookLoadingState extends GetTafssersBooksStates {}
+class InitialGetTafssersBookState extends QuranPagePlayerState {}
 
-class GetTafssersBookSuccssesState extends GetTafssersBooksStates {}
+class LoadingState extends QuranPagePlayerState {}
 
-class GetTafssersBookErrorState extends GetTafssersBooksStates {}
+class QuranPagePlayerPlaying extends QuranPagePlayerState {
+  final AudioPlayer player;
+  final Stream<Duration?> audioPlayerStream;
+  final int suraNumber;
+  final QuranPageReciter reciter;
+  final List durations;
 
-class GetAppDirectorySuccess extends GetTafssersBooksStates {}
+  QuranPagePlayerPlaying({
+    required this.player,
+    required this.audioPlayerStream,
+    required this.suraNumber,
+    required this.reciter,
+    required this.durations,
+  });
+}
 
-class GetLocalBooksSuccess extends GetTafssersBooksStates {}
+class QuranPagePlayerStoping extends QuranPagePlayerState {}
+
+class QuranPagePlayerStarting extends QuranPagePlayerState {}
+
+class QuranPagePlayerkilling extends QuranPagePlayerState {}
+
+class QuranPagePlayerDispose extends QuranPagePlayerState {}
+
+class IsDownloadingState extends QuranPagePlayerState {}
+
+class QuranPagePlayerDownloading extends QuranPagePlayerState {
+  final bool isDownloading;
+
+  QuranPagePlayerDownloading({required this.isDownloading});
+}
+
+class QuranPagePlayerDownloaded extends QuranPagePlayerState {
+  final String fullSuraFilePath;
+
+  QuranPagePlayerDownloaded({required this.fullSuraFilePath});
+}
+
+class QuranPagePlayerDownloadError extends QuranPagePlayerState {
+  final String error;
+
+  QuranPagePlayerDownloadError({required this.error});
+}

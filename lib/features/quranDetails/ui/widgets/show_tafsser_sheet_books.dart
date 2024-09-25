@@ -114,7 +114,7 @@ class _AvailabeTafsserBooksSheetState extends State<AvailabeTafsserBooksSheet> {
                                               : const SpinKitWaveSpinner(
                                                   color: Colors.white,
                                                   size: 30,
-                                                )
+                                                ),
                                         ],
                                       ),
                                     ),

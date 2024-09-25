@@ -11,6 +11,7 @@ Color fiveColor = const Color(0xff651c24);
 Color kprimaryDarkColor = const Color(0xfffeab1f);
 Color secondDarkColor = const Color(0xfff8480d);
 Color specialColor = const Color(0xFF2196F3);
+Color specialGreen = const Color(0xff007258);
 
 const Color primaryColor = Color(0xffC7B7A3);
 const Color accentColor = Color.fromARGB(255, 141, 74, 29);

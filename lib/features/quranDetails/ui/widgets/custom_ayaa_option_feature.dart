@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:quran/quran.dart';
 import 'package:quran_app/constant/colors.dart';
 
 class CustomAyaaOptionFeature extends StatelessWidget {
@@ -16,8 +15,6 @@ class CustomAyaaOptionFeature extends StatelessWidget {
   final void Function()? onTap;
   @override
   Widget build(BuildContext context) {
-    getReciters();
-
     return GestureDetector(
       onTap: onTap,
       child: Container(

@@ -5,12 +5,15 @@ import 'dart:io';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:quran/quran.dart';
 import 'package:quran_app/constant/colors.dart';
 import 'package:quran_app/constant/style.dart';
 import 'package:quran_app/core/helper/hive_helper.dart';
+import 'package:quran_app/features/quranDetails/logic/cubit/get_tafssers_books.dart';
+import 'package:quran_app/features/quranDetails/logic/cubit/get_tafssers_books_states.dart';
 import 'package:quran_app/features/quranDetails/logic/translation/translationdata.dart';
 import 'package:quran_app/features/quranDetails/ui/widgets/basmala.dart';
 import 'package:quran_app/features/quranDetails/ui/widgets/custom_page_namber.dart';
@@ -53,45 +56,45 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
 
   List<GlobalKey> richTextKeys = List.generate(604, (_) => GlobalKey());
 
-  void highlightVerseFunction() {
-    setState(() {
-      shouldHighlightText = widget.shouldHighlightText;
-    });
+  // void highlightVerseFunction() {
+  //   setState(() {
+  //     shouldHighlightText = widget.shouldHighlightText;
+  //   });
 
-    if (widget.shouldHighlightText) {
-      setState(() {
-        highlightVerse = widget.highlightVerse;
-      });
+  //   if (widget.shouldHighlightText) {
+  //     setState(() {
+  //       highlightVerse = widget.highlightVerse;
+  //     });
 
-      // Timer to manage the blinking effect
-      Timer.periodic(const Duration(milliseconds: 400), (timer) {
-        if (mounted) {
-          setState(() {
-            // Toggle the highlight state to create the blinking effect
-            shouldHighlightText = !shouldHighlightText;
-          });
-        }
+  //     // Timer to manage the blinking effect
+  //     Timer.periodic(const Duration(milliseconds: 400), (timer) {
+  //       if (mounted) {
+  //         setState(() {
+  //           // Toggle the highlight state to create the blinking effect
+  //           shouldHighlightText = !shouldHighlightText;
+  //         });
+  //       }
 
-        // Stop the timer after 5 ticks (2 seconds)
-        if (timer.tick == 5) {
-          if (mounted) {
-            setState(() {
-              highlightVerse = ""; // Clear the highlighted verse
-              shouldHighlightText = false; // Ensure highlighting is turned off
-            });
-          }
-          timer.cancel(); // Cancel the timer
-        }
-      });
-    }
-  }
+  //       // Stop the timer after 5 ticks (2 seconds)
+  //       if (timer.tick == 5) {
+  //         if (mounted) {
+  //           setState(() {
+  //             highlightVerse = ""; // Clear the highlighted verse
+  //             shouldHighlightText = false; // Ensure highlighting is turned off
+  //           });
+  //         }
+  //         timer.cancel(); // Cancel the timer
+  //       }
+  //     });
+  //   }
+  // }
 
-  Future<void> changeHighlightSurah() async {
-    await Future.delayed(const Duration(seconds: 2));
-    setState(() {
-      shouldHighlightSura = false;
-    });
-  }
+  // Future<void> changeHighlightSurah() async {
+  //   await Future.delayed(const Duration(seconds: 2));
+  //   setState(() {
+  //     shouldHighlightSura = false;
+  //   });
+  // }
 
   @override
   void initState() {
@@ -102,11 +105,10 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     WakelockPlus.enable();
-    highlightVerseFunction();
-    changeHighlightSurah();
+    // highlightVerseFunction();
+    // changeHighlightSurah();
     initializeDirectory();
     super.initState();
-    print(index);
   }
 
   @override
@@ -140,76 +142,85 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: secondColor,
-      body: PageView.builder(
-        scrollDirection: Axis.horizontal,
-        onPageChanged: (a) {
-          setState(() {
-            textSpan = "";
-          });
-          index = a;
-          print(a);
-        },
-        controller: _pageController,
-        itemCount: totalPagesCount + 1,
-        itemBuilder: (context, index) {
-          if (index == 0) {
-            return const QuranStart();
-          }
-          return SizedBox(
-            height: MediaQuery.sizeOf(context).height,
-            child: Column(
-              children: [
-                SurahHeaderName(
-                  widget: widget,
-                  index: index,
-                ),
-                if (index == 1 || index == 2)
-                  SizedBox(
-                    height: MediaQuery.sizeOf(context).height * .15,
-                  ),
-                SizedBox(
-                  height: 15.h,
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 4.h, vertical: 0),
-                    child: SingleChildScrollView(
-                      child: SizedBox(
-                        width: double.infinity,
-                        child: Column(
-                          children: [
-                            RichText(
-                              locale: const Locale("ar"),
-                              key: richTextKeys[index - 1],
-                              textDirection: TextDirection.rtl,
-                              textAlign:
-                                  (index == 1 || index == 2 || index > 570)
-                                      ? TextAlign.center
-                                      : TextAlign.center,
-                              softWrap: true,
-                              text: TextSpan(
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 26.sp,
-                                  ),
-                                  children: formatPageSpans(index)),
-                            ),
-                          ],
+    return BlocProvider<GetTafssersBookCubit>(
+      create: (context) => GetTafssersBookCubit()..addReciters(),
+      child: BlocConsumer<GetTafssersBookCubit, QuranPagePlayerState>(
+          listener: (context, state) {},
+          builder: (context, state) {
+            return Scaffold(
+              backgroundColor: secondColor,
+              body: PageView.builder(
+                scrollDirection: Axis.horizontal,
+                onPageChanged: (a) {
+                  setState(() {
+                    textSpan = "";
+                  });
+                  index = a;
+                  print(a);
+                },
+                controller: _pageController,
+                itemCount: totalPagesCount + 1,
+                itemBuilder: (context, index) {
+                  if (index == 0) {
+                    return const QuranStart();
+                  }
+                  return SizedBox(
+                    height: MediaQuery.sizeOf(context).height,
+                    child: Column(
+                      children: [
+                        SurahHeaderName(
+                          widget: widget,
+                          index: index,
                         ),
-                      ),
+                        if (index == 1 || index == 2)
+                          SizedBox(
+                            height: MediaQuery.sizeOf(context).height * .15,
+                          ),
+                        SizedBox(
+                          height: 15.h,
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 4.h, vertical: 0),
+                            child: SingleChildScrollView(
+                              child: SizedBox(
+                                width: double.infinity,
+                                child: Column(
+                                  children: [
+                                    RichText(
+                                      locale: const Locale("ar"),
+                                      key: richTextKeys[index - 1],
+                                      textDirection: TextDirection.rtl,
+                                      textAlign: (index == 1 ||
+                                              index == 2 ||
+                                              index > 570)
+                                          ? TextAlign.center
+                                          : TextAlign.center,
+                                      softWrap: true,
+                                      text: TextSpan(
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 26.sp,
+                                          ),
+                                          children: formatPageSpans(index)),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        CustomPageNumber(
+                          index: index,
+                        )
+                      ],
                     ),
-                  ),
-                ),
-                CustomPageNumber(
-                  index: index,
-                )
-              ],
-            ),
-          );
-        },
-      ),
+                  );
+                },
+              ),
+            );
+          }),
     );
   }
 

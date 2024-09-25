@@ -1,19 +1,14 @@
 import 'dart:io';
-
-import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'package:permission_handler/permission_handler.dart';
 import 'package:quran/quran.dart';
 import 'package:quran_app/constant/colors.dart';
 
 import 'package:quran_app/core/helper/hive_helper.dart';
 import 'package:quran_app/core/helper/saved_and%20shared%20image.dart';
-import 'package:quran_app/core/helper/show_toast_state.dart';
-import 'package:quran_app/features/quranDetails/logic/translation/translationdata.dart';
+
 import 'package:quran_app/features/quranDetails/ui/widgets/show_tafsser_sheet_books.dart';
 
 import 'package:quran_app/features/quranDetails/ui/widgets/surah_screen_shot.dart';
@@ -524,50 +519,6 @@ class _ShareAyaaAsImagepPageState extends State<ShareAyaaAsImagepPage> {
       ),
     );
   }
-
-//   Future<void> downLoadTafsserBook(int index, BuildContext context) async {
-//     PermissionStatus storageStatus = await Permission.storage.request();
-//     PermissionStatus mediaStatus =
-//         await Permission.accessMediaLocation.request();
-//     PermissionStatus manageStatus =
-//         await Permission.manageExternalStorage.request();
-//     final fileExists = File(
-//             "${widget.appDir.path}/${translationDataList[index].typeText}.json")
-//         .existsSync();
-//     final translation = translationDataList[index];
-
-//     if (widget.isDownloading != translation.url) {
-//       if (fileExists || index == 0 || index == 10) {
-//         updateHiveSavedData('addTafseerValue', index);
-//         setState(() {});
-//       } else {
-//         if (storageStatus.isGranted && manageStatus.isGranted) {
-//         } else if (storageStatus.isPermanentlyDenied &&
-//             manageStatus.isPermanentlyDenied) {
-//           await openAppSettings();
-//         } else if (storageStatus.isDenied) {
-//           print('Premission is denied');
-//         }
-//         Dio()
-//             .download(translation.url,
-//                 "${widget.appDir.path}/${translation.typeText}.json")
-//             .then((e) {
-//           showToast(text: 'تم تنزيل الكتاب بنجح', state: ToastStates.success);
-//           updateHiveSavedData('addTafseerValue', index);
-//         }).catchError((e) {
-//           showToast(text: 'تحقق من اتصالك بنترنت', state: ToastStates.error);
-//         });
-//       }
-//       setState(() {});
-
-//       widget.getTranslationData;
-//     }
-//     setState(() {});
-
-//     if (mounted) {
-//       Navigator.pop(context);
-//     }
-//   }
 
   Widget customBuildDropdown(
       {required int value, required Function(int?)? onChanged}) {
