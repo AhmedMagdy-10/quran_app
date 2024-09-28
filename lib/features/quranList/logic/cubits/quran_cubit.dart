@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quran/quran.dart';
+import 'package:quran_app/core/helper/hive_helper.dart';
 import 'package:quran_app/features/quranList/logic/cubits/quran_states.dart';
 import 'package:quran_app/features/quranList/logic/models/surah_model.dart';
 import 'package:string_validator/string_validator.dart';
@@ -36,9 +37,11 @@ class QuranPageCubit extends Cubit<QuranPageStates> {
   Map<String, dynamic>? ayatFiltered;
   Timer? _debounce;
 
+  bool searchQuery = false;
   void searchAyaat(String query) {
     if (_debounce?.isActive ?? false) _debounce!.cancel();
     _debounce = Timer(const Duration(milliseconds: 300), () {
+      searchQuery = true;
       if (query.isEmpty) {
         ayaatSrearched = allAyaat;
       } else if (isInt(query)) {
@@ -55,7 +58,7 @@ class QuranPageCubit extends Cubit<QuranPageStates> {
           return surahName.contains(query.toLowerCase()) ||
               surahNameTranslated.contains(query.toLowerCase());
         }).toList();
-        if (ayaatSrearched.isEmpty) {
+        if (ayaatSrearched.isEmpty && query.length > 4) {
           ayatFiltered = Map<String, dynamic>.from(searchWords(query));
         }
       } else {

@@ -473,6 +473,7 @@ class _ShareAyaaAsImagepPageState extends State<ShareAyaaAsImagepPage> {
                 setState(() {
                   isShooting = true;
                 });
+                await Future.delayed(const Duration(milliseconds: 300)); 
 
                 await screenshotController
                     .capture(delay: const Duration(milliseconds: 100))
@@ -498,6 +499,7 @@ class _ShareAyaaAsImagepPageState extends State<ShareAyaaAsImagepPage> {
                 setState(() {
                   isShooting = true;
                 });
+                await Future.delayed(const Duration(milliseconds: 300)); 
                 await screenshotController
                     .capture(delay: const Duration(milliseconds: 100))
                     .then((screenImage) {

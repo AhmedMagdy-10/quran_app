@@ -47,6 +47,8 @@ class SurahDetailsPage extends StatefulWidget {
 class _SurahDetailsPageState extends State<SurahDetailsPage> {
   late int index;
   late PageController _pageController;
+  final TransformationController _interactiveViewerController =
+      TransformationController();
   late Timer timer;
   String textSpan = '';
   late String highlightVerse;
@@ -149,75 +151,83 @@ class _SurahDetailsPageState extends State<SurahDetailsPage> {
           builder: (context, state) {
             return Scaffold(
               backgroundColor: secondColor,
-              body: PageView.builder(
-                scrollDirection: Axis.horizontal,
-                onPageChanged: (a) {
-                  setState(() {
-                    textSpan = "";
-                  });
-                  index = a;
-                  print(a);
-                },
-                controller: _pageController,
-                itemCount: totalPagesCount + 1,
-                itemBuilder: (context, index) {
-                  if (index == 0) {
-                    return const QuranStart();
-                  }
-                  return SizedBox(
-                    height: MediaQuery.sizeOf(context).height,
-                    child: Column(
-                      children: [
-                        SurahHeaderName(
-                          widget: widget,
-                          index: index,
-                        ),
-                        if (index == 1 || index == 2)
-                          SizedBox(
-                            height: MediaQuery.sizeOf(context).height * .15,
+              body: InteractiveViewer(
+                panEnabled: true,
+                maxScale: 5.0,
+                minScale: 0.1,
+                transformationController: _interactiveViewerController,
+                trackpadScrollCausesScale: true,
+                child: PageView.builder(
+                  scrollDirection: Axis.horizontal,
+                  onPageChanged: (a) {
+                    setState(() {
+                      textSpan = "";
+                    });
+                    index = a;
+                    updateHiveSavedData('lastRead', a);
+                    print(a);
+                  },
+                  controller: _pageController,
+                  itemCount: totalPagesCount + 1,
+                  itemBuilder: (context, index) {
+                    if (index == 0) {
+                      return const QuranStart();
+                    }
+                    return SizedBox(
+                      height: MediaQuery.sizeOf(context).height,
+                      child: Column(
+                        children: [
+                          SurahHeaderName(
+                            widget: widget,
+                            index: index,
                           ),
-                        SizedBox(
-                          height: 15.h,
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 4.h, vertical: 0),
-                            child: SingleChildScrollView(
-                              child: SizedBox(
-                                width: double.infinity,
-                                child: Column(
-                                  children: [
-                                    RichText(
-                                      locale: const Locale("ar"),
-                                      key: richTextKeys[index - 1],
-                                      textDirection: TextDirection.rtl,
-                                      textAlign: (index == 1 ||
-                                              index == 2 ||
-                                              index > 570)
-                                          ? TextAlign.center
-                                          : TextAlign.center,
-                                      softWrap: true,
-                                      text: TextSpan(
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 26.sp,
-                                          ),
-                                          children: formatPageSpans(index)),
-                                    ),
-                                  ],
+                          if (index == 1 || index == 2)
+                            SizedBox(
+                              height: MediaQuery.sizeOf(context).height * .15,
+                            ),
+                          SizedBox(
+                            height: 15.h,
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 4.h, vertical: 0),
+                              child: SingleChildScrollView(
+                                child: SizedBox(
+                                  width: double.infinity,
+                                  child: Column(
+                                    children: [
+                                      RichText(
+                                        locale: const Locale("ar"),
+                                        key: richTextKeys[index - 1],
+                                        textDirection: TextDirection.rtl,
+                                        textAlign: (index == 1 ||
+                                                index == 2 ||
+                                                index > 570)
+                                            ? TextAlign.center
+                                            : TextAlign.center,
+                                        softWrap: true,
+                                        text: TextSpan(
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 26.sp,
+                                            ),
+                                            children: formatPageSpans(index)),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                        CustomPageNumber(
-                          index: index,
-                        )
-                      ],
-                    ),
-                  );
-                },
+                          CustomPageNumber(
+                            index: index,
+                          )
+                        ],
+                      ),
+                    );
+                  },
+                ),
               ),
             );
           }),

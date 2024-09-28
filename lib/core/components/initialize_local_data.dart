@@ -10,4 +10,5 @@ localHiveData() async {
   savedDateHive("indexOfTranslationInVerseByVerse", 1);
   savedDateHive("colorsIndex", 0);
   savedDateHive("reciterIndex", 0);
+  savedDateHive("lastRead", "non");
 }

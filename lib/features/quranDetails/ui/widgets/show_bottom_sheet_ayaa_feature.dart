@@ -7,7 +7,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:quran/quran.dart';
-import 'package:quran/reciters.dart';
 import 'package:quran_app/constant/colors.dart';
 import 'package:quran_app/core/helper/build_tafseer_spans.dart';
 import 'package:quran_app/core/helper/build_verse_spans.dart';
@@ -34,11 +33,8 @@ Future<dynamic> showBottomSheetAyaaFeature(
   int lastVerse = verseNumber;
   String isDownloading = '';
 
-  // var getCubit = context.read<GetTafssersBookCubit>();
-
   return showBarModalBottomSheet(
       barrierColor: Colors.black45,
-      // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       enableDrag: true,
       expand: false,
       duration: const Duration(milliseconds: 500),
@@ -273,12 +269,7 @@ Future<dynamic> showBottomSheetAyaaFeature(
                         onTap: () async {
                           print("${"*******************${state}"} ");
 
-                          if (state is QuranPagePlayerDownloaded) {
-                            print('okk');
-                            await cubit.stopPlaying();
-                          }
-
-                          // Start downloading the sura
+                          await cubit.stopAnyPlayingAudio();
                           await cubit
                               .downloadAndCacheSuraAudio(
                             getSurahNameEnglish(surahNumber),
@@ -350,7 +341,7 @@ Future<dynamic> showBottomSheetAyaaFeature(
 
                                       if (state is QuranPagePlayerStoping) {
                                         print('okk');
-                                        await cubit.stopPlaying();
+                                        await cubit.stopAnyPlayingAudio();
                                       }
 
                                       // Download audio for the selected reciter

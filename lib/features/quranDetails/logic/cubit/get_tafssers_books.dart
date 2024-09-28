@@ -147,7 +147,7 @@ class GetTafssersBookCubit extends Cubit<QuranPagePlayerState> {
   ) async {
     try {
       // Stop and dispose of any existing audio player
-      await stopPlaying();
+      await stopAnyPlayingAudio();
       emit(QuranPagePlayerStarting());
 
       audioPlayer = AudioPlayer();
@@ -234,16 +234,16 @@ class GetTafssersBookCubit extends Cubit<QuranPagePlayerState> {
     }
   }
 
-  // Method to stop playing audio
-  Future<void> stopPlaying() async {
-    if (audioPlayer != null) {
-      print("Stopping the audio player.");
-      await audioPlayer!.stop();
-      await audioPlayer!.dispose();
-      audioPlayer = null; // Reset the audio player
-    }
-    emit(QuranPagePlayerStoping());
-  }
+  // // Method to stop playing audio
+  // Future<void> stopPlaying() async {
+  //   if (audioPlayer != null) {
+  //     print("Stopping the audio player.");
+  //     await audioPlayer!.stop();
+  //     await audioPlayer!.dispose();
+  //     audioPlayer = null; // Reset the audio player
+  //   }
+  //   emit(QuranPagePlayerStoping());
+  // }
 
   // Method to dispose of the audio player completely
   Future<void> disposePlayer() async {
@@ -263,5 +263,21 @@ class GetTafssersBookCubit extends Cubit<QuranPagePlayerState> {
       audioPlayer = null;
     }
     emit(QuranPagePlayerkilling());
+  }
+
+  Future<bool> isAnyAudioPlaying() async {
+    if (audioPlayer != null) {
+      return audioPlayer!.playing;
+    } else {
+      return false;
+    }
+  }
+
+  // Stop the currently playing audio if any
+  Future<void> stopAnyPlayingAudio() async {
+    if (await isAnyAudioPlaying()) {
+      await audioPlayer!.stop(); // Stop the audio
+      emit(QuranPagePlayerStoping()); // Emit the appropriate state
+    }
   }
 }

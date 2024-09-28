@@ -8,6 +8,8 @@ class SuccessQuranState extends QuranPageStates {}
 
 class SuccessdQuranState extends QuranPageStates {}
 
+class UpdatePrecent extends QuranPageStates {}
+
 class ErrorQuranState extends QuranPageStates {
   final String errorMessage;
 
