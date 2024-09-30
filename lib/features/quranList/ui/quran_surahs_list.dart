@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:icons_plus/icons_plus.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:quran/quran.dart';
 import 'package:quran_app/constant/colors.dart';
+import 'package:quran_app/core/components/custom_app_bar.dart';
 import 'package:quran_app/core/helper/hive_helper.dart';
 import 'package:quran_app/core/helper/skeletoizer_loading.dart';
 import 'package:quran_app/features/quranDetails/ui/surah_details_page.dart';
@@ -41,10 +43,15 @@ class QuranSurahPage extends StatelessWidget {
           }
           // var searchValue;
           return Scaffold(
-            appBar: AppBar(
-              scrolledUnderElevation: 0,
-              title: const Text('القران الكريم'),
-              centerTitle: true,
+            appBar: CustomAppBar(
+              title: const Text("القران الكريم"),
+              isCenter: true,
+              leading: IconButton(
+                onPressed: () => Navigator.of(context).pop(),
+                icon: const Icon(
+                  Iconsax.arrow_right_1_outline,
+                ),
+              ),
             ),
             body: SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
@@ -161,10 +168,6 @@ class QuranSurahPage extends StatelessWidget {
                                     width: 100.w,
                                     height: 100.h,
                                   ),
-                                  // const Icon(
-                                  //   Icons.arrow_forward_ios_outlined,
-                                  //   color: Colors.white,
-                                  // )
                                 ],
                               )),
                         ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:icons_plus/icons_plus.dart';
 import 'package:quran_app/constant/colors.dart';
 
 class CustomTextField extends StatelessWidget {
@@ -26,25 +27,29 @@ class CustomTextField extends StatelessWidget {
       decoration: InputDecoration(
         border: InputBorder.none,
         contentPadding: const EdgeInsets.all(8),
-        fillColor: secondColor,
+        fillColor: const Color(0xfffaf9f6),
         filled: true,
         hintText: hintText,
-        hintStyle: TextStyle(
-          color: threeColor,
+        hintStyle: const TextStyle(
           fontSize: 14,
           fontFamily: 'Cairo',
         ),
-        suffixIcon: const Icon(Icons.search),
+        suffixIcon: Icon(
+          Iconsax.search_normal_outline,
+          color: fiveColor,
+        ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
           borderSide: BorderSide(
-            color: secondColor,
+            color: fiveColor,
+            width: 0.5,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
           borderSide: BorderSide(
-            color: secondColor,
+            color: fiveColor,
+            width: 0.5,
           ),
         ),
       ),

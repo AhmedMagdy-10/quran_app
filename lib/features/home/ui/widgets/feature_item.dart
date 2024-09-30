@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:quran_app/constant/colors.dart';
 import 'package:quran_app/features/home/logic/model/feature_model.dart';
-import 'package:quran_app/features/home/ui/widgets/home_page_body.dart';
 import 'package:quran_app/features/quranList/ui/quran_surahs_list.dart';
 
 import '../../../../generated/l10n.dart';
@@ -81,9 +81,11 @@ class FeaturesItemList extends StatelessWidget {
             child: Container(
               height: MediaQuery.sizeOf(context).height * 0.18,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                color: Colors.white,
-              ),
+                  borderRadius: BorderRadius.circular(16),
+                  gradient: const LinearGradient(colors: [
+                    primaryColor,
+                    Colors.white,
+                  ])),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -106,7 +108,7 @@ class FeaturesItemList extends StatelessWidget {
           Expanded(
             child: GridView.builder(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3, crossAxisSpacing: 8, mainAxisSpacing: 12),
+                  crossAxisCount: 4, crossAxisSpacing: 8, mainAxisSpacing: 12),
               itemBuilder: (context, index) => FeatureItem(
                 featureModel: itemList(context)[index],
               ),
@@ -139,15 +141,21 @@ class FeatureItem extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.all(10.w),
         decoration: BoxDecoration(
+          border: Border.all(color: fiveColor),
           borderRadius: BorderRadius.circular(16.r),
-          color: Colors.white,
+          color: const Color(0xfffaf9f6),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(
-              featureModel.itemImage,
-              height: MediaQuery.sizeOf(context).height * 0.05.h,
+            Expanded(
+              child: CircleAvatar(
+                radius: 50,
+                backgroundColor: Colors.white,
+                child: Image.asset(
+                  featureModel.itemImage,
+                ),
+              ),
             ),
             SizedBox(
               height: 5.h,
@@ -155,7 +163,10 @@ class FeatureItem extends StatelessWidget {
             FittedBox(
               fit: BoxFit.scaleDown,
               child: Text(featureModel.itemText,
-                  style: Theme.of(context).textTheme.titleMedium),
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium!
+                      .copyWith(fontWeight: FontWeight.bold)),
             ),
           ],
         ),

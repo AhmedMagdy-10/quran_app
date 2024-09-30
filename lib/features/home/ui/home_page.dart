@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:icons_plus/icons_plus.dart';
+import 'package:quran_app/constant/colors.dart';
+import 'package:quran_app/core/components/custom_app_bar.dart';
 import 'package:quran_app/features/home/logic/cubits/main_cubit.dart';
 import 'package:quran_app/features/home/logic/cubits/main_cubit_states.dart';
 
@@ -17,27 +20,32 @@ class HomePage extends StatelessWidget {
           listener: (context, state) {},
           builder: (context, state) {
             return Scaffold(
-              appBar: AppBar(
-                scrolledUnderElevation: 0,
-                elevation: 0,
+              appBar: CustomAppBar(
                 title: Text(
                   S.of(context).homeTitle,
-                  style: Theme.of(context).textTheme.titleLarge,
                 ),
                 actions: [
-                  IconButton(
-                      onPressed: () {
-                        BlocProvider.of<MainCubit>(context).changeAppMode();
-                      },
-                      icon: BlocProvider.of<MainCubit>(context).isDark
-                          ? const Icon(
-                              Icons.sunny,
-                              color: Colors.amber,
-                            )
-                          : const Icon(
-                              Icons.brightness_2,
-                              color: Colors.blueAccent,
-                            ))
+                  InkWell(
+                    onTap: () {},
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 8),
+                      child: Container(
+                        padding: const EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: fiveColor,
+                            width: 0.5,
+                          ),
+                        ),
+                        child: Icon(
+                          Iconsax.notification_bing_outline,
+                          color: fiveColor,
+                        ),
+                      ),
+                    ),
+                  )
                 ],
               ),
               body: const HomePageBody(),

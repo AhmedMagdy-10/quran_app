@@ -19,27 +19,49 @@ class HomePageBody extends StatelessWidget {
     var formatDate = DateFormat.yMMMMEEEEd('ar').format(currentDate);
 
     return Padding(
-      padding: EdgeInsets.all(20.w),
+      padding: EdgeInsets.all(16.w),
       child: Center(
         child: Column(
           children: [
-            SizedBox(
-              height: 20.h,
-            ),
-            Text(
-              jHijri1.toString(),
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            SizedBox(
-              height: 10.h,
-            ),
+            // Text(
+            //   jHijri1.toString(),
+            //   style: Theme.of(context).textTheme.titleMedium,
+            // ),
+            // SizedBox(
+            //   height: 10.h,
+            // ),
             Text(
               formatDate,
-              style: Theme.of(context).textTheme.titleMedium,
+              style: Theme.of(context)
+                  .textTheme
+                  .titleMedium!
+                  .copyWith(fontFamily: 'Cairo'),
             ),
+            SizedBox(
+              height: 15.h,
+            ),
+            Text(
+              'صلاة الظهر',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+
+            Text(
+              '12:06 pm',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+
+            Text(
+              'باقي من الزمن 5 ساعات',
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                    fontSize: 17.sp,
+                    color: const Color(0xff385974),
+                  ),
+            ),
+
             SizedBox(
               height: 16.h,
             ),
+
             const FeaturesItemList(),
           ],
         ),
