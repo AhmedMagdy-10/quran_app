@@ -32,7 +32,9 @@ class QuranSurahPage extends StatelessWidget {
           var ayaatSrearched = cubit.ayaatSrearched;
           var ayaatFiltered = cubit.ayatFiltered;
 
-          int lastRead = getHiveSavedData('lastRead');
+          int lastRead = getHiveSavedData('lastRead') == 'non'
+              ? 0
+              : getHiveSavedData('lastRead');
           int totalVerses = 604;
 
           double progress = lastRead / totalVerses;
@@ -48,9 +50,7 @@ class QuranSurahPage extends StatelessWidget {
               isCenter: true,
               leading: IconButton(
                 onPressed: () => Navigator.of(context).pop(),
-                icon: const Icon(
-                  Iconsax.arrow_right_1_outline,
-                ),
+                icon: const Icon(Iconsax.arrow_right_1_outline),
               ),
             ),
             body: SingleChildScrollView(

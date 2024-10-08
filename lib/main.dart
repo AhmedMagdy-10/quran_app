@@ -1,3 +1,4 @@
+import 'package:alarm/alarm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -16,6 +17,7 @@ void main() async {
   bool? mode = CacheHelper.getSaveData(key: 'isDark');
   Bloc.observer = Observer();
   await hiveHelperInit();
+  await Alarm.init();
   await localHiveData();
   print(getHiveSavedDataBool('addTafseerIamge'));
   runApp(MyApp(

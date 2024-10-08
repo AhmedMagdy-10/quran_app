@@ -18,11 +18,15 @@ class MainCubit extends Cubit<MainCubitStates> {
   }
 
   PrayerTimes? prayerTimes;
+  final double defaultLatitude = 30.033333;
+  final double defaultLongitude = 31.233334;
 
   getPrayerTimes() {
     emit(LoadingState());
     try {
-      final coordinates = Coordinates(position!.latitude, position!.longitude);
+      final coordinates = position != null
+          ? Coordinates(position!.latitude, position!.longitude)
+          : Coordinates(defaultLatitude, defaultLongitude);
       final calculationCountry = CalculationMethod.egyptian.getParameters();
       final date = DateComponents(
           DateTime.now().year, DateTime.now().month, DateTime.now().day);
@@ -53,19 +57,22 @@ class MainCubit extends Cubit<MainCubitStates> {
 
       if (premission == LocationPermission.denied) {
         emit(PremissionError(errorPre: 'Location permissions are denied'));
+        getPrayerTimes();
+        return;
       }
     }
-
-    Geolocator.getPositionStream().listen((Position position) {
-      this.position = position;
-
-      print(
-          '${position.latitude.toString()},${position.longitude.toString()} ');
-    }).onError((e) {
+    try {
+      // Try to get the current position
+      position = await Geolocator.getCurrentPosition();
+      if (position != null) {
+        print('Position: ${position!.latitude}, ${position!.longitude}');
+        emit(GetPositionSuccess());
+      }
+    } catch (e) {
       emit(PremissionError(errorPre: e.toString()));
-    });
+    }
 
+    // Call getPrayerTimes even if position is null (fallback to Cairo)
     getPrayerTimes();
-    emit(GetPositionSuccess());
   }
 }

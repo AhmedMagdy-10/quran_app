@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:icons_plus/icons_plus.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:quran/quran.dart';
 import 'package:quran_app/constant/colors.dart';
@@ -393,8 +394,7 @@ Future<dynamic> showBottomSheetAyaaFeature(
                                         backgroundColor: Colors.white,
                                         child: Icon(
                                           state is QuranPagePlayerStarting
-                                              ? Icons
-                                                  .pause_circle_outline_rounded
+                                              ? Iconsax.voice_square_outline
                                               : state
                                                       is QuranPagePlayerDownloading
                                                   ? Icons

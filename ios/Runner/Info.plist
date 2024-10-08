@@ -51,6 +51,10 @@
     <string>ar</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>needforstoreimagetogallery</string>
+	<key>UIBackgroundModes</key>
+    <string>audio</string>
+    <string>fetch</string>
+
     ...
     </array>
 </dict>

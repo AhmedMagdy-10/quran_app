@@ -10,9 +10,14 @@ import 'package:quran_app/features/home/logic/cubits/main_cubit_states.dart';
 import 'package:quran_app/features/home/ui/widgets/home_page_body.dart';
 import 'package:quran_app/generated/l10n.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<MainCubit>(

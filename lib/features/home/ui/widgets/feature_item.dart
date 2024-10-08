@@ -59,11 +59,6 @@ class FeaturesItemList extends StatelessWidget {
           itemText: S.of(context).Azann,
           navigatorScreen: const QuranSurahPage(),
         ),
-        FeatureModel(
-          itemImage: 'assets/image/bell.png',
-          itemText: S.of(context).notifcation,
-          navigatorScreen: const QuranSurahPage(),
-        ),
       ];
   @override
   Widget build(BuildContext context) {

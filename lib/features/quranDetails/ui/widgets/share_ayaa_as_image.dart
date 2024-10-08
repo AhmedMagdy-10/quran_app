@@ -2,9 +2,11 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:icons_plus/icons_plus.dart';
 
 import 'package:quran/quran.dart';
 import 'package:quran_app/constant/colors.dart';
+import 'package:quran_app/core/components/custom_app_bar.dart';
 
 import 'package:quran_app/core/helper/hive_helper.dart';
 import 'package:quran_app/core/helper/saved_and%20shared%20image.dart';
@@ -58,15 +60,20 @@ class _ShareAyaaAsImagepPageState extends State<ShareAyaaAsImagepPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.blue,
-        title: const Text(
-          'تفاصيل الصورة',
-          style: TextStyle(color: Colors.white),
-        ),
-        centerTitle: true,
-      ),
+      appBar: CustomAppBar(
+          title: const Text(
+            'تفاصيل الصورة',
+          ),
+          isCenter: true,
+          leading: IconButton(
+            icon: Icon(
+              Iconsax.arrow_right_3_outline,
+              color: fiveColor,
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          )),
       body: Padding(
         padding: EdgeInsets.all(16.w),
         child: Column(
@@ -410,15 +417,22 @@ class _ShareAyaaAsImagepPageState extends State<ShareAyaaAsImagepPage> {
                         fontFamily: 'Cairo',
                       ),
                     ),
-                    CircleAvatar(
-                      radius: 15,
-                      backgroundColor: specialColor,
-                      child: const Icon(
-                        Icons.color_lens,
-                        size: 19,
-                        color: Colors.white,
+                    Container(
+                      padding: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: fiveColor,
+                          width: 0.5,
+                        ),
                       ),
-                    )
+                      child: Icon(
+                        Icons.color_lens,
+                        color: fiveColor,
+                        size: 18,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -473,7 +487,7 @@ class _ShareAyaaAsImagepPageState extends State<ShareAyaaAsImagepPage> {
                 setState(() {
                   isShooting = true;
                 });
-                await Future.delayed(const Duration(milliseconds: 300)); 
+                await Future.delayed(const Duration(milliseconds: 300));
 
                 await screenshotController
                     .capture(delay: const Duration(milliseconds: 100))
@@ -499,7 +513,7 @@ class _ShareAyaaAsImagepPageState extends State<ShareAyaaAsImagepPage> {
                 setState(() {
                   isShooting = true;
                 });
-                await Future.delayed(const Duration(milliseconds: 300)); 
+                await Future.delayed(const Duration(milliseconds: 300));
                 await screenshotController
                     .capture(delay: const Duration(milliseconds: 100))
                     .then((screenImage) {
