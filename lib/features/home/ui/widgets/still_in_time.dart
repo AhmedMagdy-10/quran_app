@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:adhan/adhan.dart';
 import 'package:alarm/alarm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -7,8 +8,10 @@ import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
 
 class CounterTimer extends StatefulWidget {
-  const CounterTimer({super.key, required this.prayerTime});
+  const CounterTimer(
+      {super.key, required this.prayerTime, required this.prayerNow});
   final DateTime prayerTime;
+  final Prayer prayerNow;
 
   @override
   State<CounterTimer> createState() => _CounterTimerState();
@@ -29,28 +32,27 @@ class _CounterTimerState extends State<CounterTimer> {
     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
 
-  Future<void> scheduleAzanNotification(DateTime prayerTime) async {
-    await flutterLocalNotificationsPlugin.zonedSchedule(
-      0,
-      'الصلاة',
-      'حان الأن موعد أذان الفجر',
-      tz.TZDateTime.from(prayerTime, tz.local),
-      const NotificationDetails(
-        android: AndroidNotificationDetails(
-          'azan_channel',
-          'Azan Notification',
-          importance: Importance.max,
-          priority: Priority.high,
-          sound: RawResourceAndroidNotificationSound('assets/audio/azan.mp3'),
-          playSound: true,
-          enableVibration: true,
-        ),
-      ),
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
-    );
-  }
+  // Future<void> scheduleAzanNotification(DateTime prayerTime) async {
+  //   await flutterLocalNotificationsPlugin.zonedSchedule(
+  //     0,
+  //     'الصلاة',
+  //     'حان الأن موعد أذان',
+  //     tz.TZDateTime.from(prayerTime, tz.local),
+  //     const NotificationDetails(
+  //       android: AndroidNotificationDetails(
+  //         'azan_channel',
+  //         'Azan Notification',
+  //         importance: Importance.defaultImportance,
+  //         priority: Priority.defaultPriority,
+  //         sound: RawResourceAndroidNotificationSound('assets/audio/azan.mp3'),
+  //         enableVibration: true,
+  //       ),
+  //     ),
+  //     androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+  //     uiLocalNotificationDateInterpretation:
+  //         UILocalNotificationDateInterpretation.absoluteTime,
+  //   );
+  // }
 
   bool isAlarmRinging = false;
   Future<void> setAlarm(int id, DateTime dt, String locale) async {
@@ -58,14 +60,12 @@ class _CounterTimerState extends State<CounterTimer> {
       notificationSettings: const NotificationSettings(
         title: 'الصلاة',
         body: 'حان الأن موعد أذان الفجر',
-        stopButton: '',
+        stopButton: 'اغلاق',
       ),
       id: id,
       dateTime: dt,
       assetAudioPath: 'assets/audio/azan.mp3',
-      volume: 0.5,
       vibrate: true,
-      loopAudio: true,
     );
 
     await Alarm.set(alarmSettings: alarmModel);

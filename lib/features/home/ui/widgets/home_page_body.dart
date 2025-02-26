@@ -28,7 +28,10 @@ class HomePageBody extends StatelessWidget {
       PrayerTimes prayerTimes =
           BlocProvider.of<MainCubit>(context).prayerTimes!;
       print('+++++++++++++++++ ${prayerTimes.fajr}');
+
       var next = prayerTimes.nextPrayer();
+
+      print('+++++++++++++++++ ${prayerTimeToString(next.name)}');
 
       var nextPrayer =
           (prayerTimes.timeForPrayer(next) ?? prayerTimes.fajr).toLocal();
@@ -65,7 +68,10 @@ class HomePageBody extends StatelessWidget {
                 style: Theme.of(context).textTheme.titleLarge,
               ),
 
-              CounterTimer(prayerTime: nextPrayer),
+              CounterTimer(
+                prayerTime: nextPrayer,
+                prayerNow: next,
+              ),
 
               SizedBox(
                 height: 16.h,

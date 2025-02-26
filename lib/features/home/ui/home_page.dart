@@ -21,7 +21,9 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<MainCubit>(
-      create: (context) => MainCubit()..getMyLoaction(),
+      create: (context) => MainCubit()
+        ..getMyLoaction()
+        ..getPrayerTimes(),
       child:
           BlocConsumer<MainCubit, MainCubitStates>(listener: (context, state) {
         if (state is PremissionError) {
